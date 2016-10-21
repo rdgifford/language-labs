@@ -1,0 +1,8 @@
+{
+  "galaxy.meteor.com": {
+    "env": {
+      "ROOT_URL": "http://language-labs.meteorapp.com",
+      "MONGO_URL": "mongodb://admin:hackreactor@ds025792.mlab.com:25792/language-labs"
+    }
+  }
+}
