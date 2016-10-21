@@ -24,3 +24,4 @@ accounts-password
 tmeasday:presence
 check
 react-meteor-data
+force-ssl
