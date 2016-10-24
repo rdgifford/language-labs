@@ -1,10 +1,15 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
+import React             from 'react';
+import { Meteor }        from 'meteor/meteor';
 import AccountsUIWrapper from './accounts'
-import SelectLanguage from './SelectLanguage';
-import Matches from './Matches';
+import SelectLanguage    from './SelectLanguage';
+import Matches           from './Matches';
+import UserProfile       from './UserProfile'
 
-const Dashboard = ({onlineUsers, language}) => {
+const Dashboard = ({
+  onlineUsers, 
+  language, 
+  user
+}) => {
   console.log(onlineUsers)
   return (
     <div className='dashboard'>
@@ -14,14 +19,16 @@ const Dashboard = ({onlineUsers, language}) => {
             VIDEO GOES HERE
           </div>
         </div>
-        <div className='current-profile'>
-          <span className='sign-out'>
+        <div className='profile'>
+          <div className='sign-out'>
             <AccountsUIWrapper />
-          </span>
+          </div>
+          <UserProfile user={user}/>
         </div>
       </div>
       <div className='bottom'>
-        <div className='text-box'></div>
+        <div className='text-box'>
+        </div>
         <div className='new-chat'>
           <div className='selected-language'>
             Selected Language
