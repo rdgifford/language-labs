@@ -1,0 +1,224 @@
+@import url(https://fonts.googleapis.com/css?family=Quicksand:300,400,700);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+
+$blue: #5fa9d9;
+$shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
+
+body {
+  margin: 0px;
+  font-family: 'quicksand' !important;
+
+  a#login-sign-in-link{
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 20px;
+    color: white;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.home-page {
+  height: 100vh;
+  width: 100vw;
+  background: url('/pattern.svg') center center ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .sign-in {
+    position: absolute;
+    right: 240px;
+    top: 40px;
+  }
+
+  .main-logo {
+    font-size: 90px;
+    color: white;
+  }
+}
+
+.language-select {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .language-form {
+
+    input {
+      font-family: 'quicksand';
+      width: 300px;
+      height: 40px;
+      border: 0px;
+      border-bottom: 1px solid rgba(0,0,0,.3);
+      font-size: 30px;
+      padding: 10px;
+      text-align: center;
+      transition: all .3s;
+
+      &:focus {
+        text-align: left;
+        width: 400px;
+        outline: 0px none;
+        border-bottom: 1px solid #5fa9d9;
+        transition: all .3s;
+      }
+    }
+
+    .submit-button {
+      cursor: pointer;
+      display: visible;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      border: 1px solid $blue;
+      background-color: transparent;
+      color: $blue;
+      margin-left: 40px;
+      font-size: 14px;
+      transition: all .3s;
+
+      &:hover {
+        background-color: $blue;
+        color: white;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.dashboard {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.1);
+
+  .top {
+    height: 65vh;
+    display: flex;
+    flex-direction: row;
+
+    .video-box {
+      display: flex;
+      flex: 3;
+      background-color: white;
+      margin: 10px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      box-shadow: $shadow;
+
+      .video-wrapper {
+        width: 100%;
+        height: auto;
+        background-color: $blue;
+        text-align: center;
+      }
+    }
+
+    .current-profile {
+      flex: 1;
+      margin: 10px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: row;
+      box-shadow: $shadow;
+      background-color: white;
+
+      .sign-out {
+        flex: 1;
+        height: 40px;
+        text-align: right;
+        padding-right: 20px;
+        padding-top: 20px;
+
+        #login-name-link {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .bottom {
+    height: 32vh;
+    display: flex;
+
+    .text-box {
+      flex: 3;
+      margin: 10px;
+      box-shadow: $shadow;
+      border-radius: 4px;
+      background-color: white;
+    }
+
+    .new-chat {
+      flex: 1;
+      margin: 10px;
+      box-shadow: $shadow;
+      border-radius: 4px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+
+      .selected-language {
+        color: $blue;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+      }
+
+      .language {
+        background-color: $blue;
+        color: white;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      .button-wrapper {
+        flex: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          font-weight: 700;
+          cursor: pointer;
+          font-family: 'quicksand';
+          color: $blue;
+          border-radius: 4px;
+          width: 80%;
+          height: 50px;
+          background: transparent;
+          border: 2px solid $blue;
+          font-size: 24px;
+          transition: all .3s;
+
+          &:hover {
+            background: $blue;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
