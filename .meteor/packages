@@ -25,3 +25,5 @@ tmeasday:presence
 check
 react-meteor-data
 force-ssl
+fourseven:scss
+gadicc:blaze-react-component
