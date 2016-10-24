@@ -20,6 +20,7 @@ const App = ({
         <Dashboard 
           onlineUsers={onlineUsers} 
           language={user.profile.language}
+          user={user}
         />
       );
     }
