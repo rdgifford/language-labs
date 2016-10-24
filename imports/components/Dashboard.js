@@ -4,6 +4,7 @@ import AccountsUIWrapper from './accounts'
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile'
+import Clock             from './Clock';
 
 const Dashboard = ({
   onlineUsers, 
@@ -28,6 +29,7 @@ const Dashboard = ({
       </div>
       <div className='bottom'>
         <div className='text-box'>
+          <Clock />
         </div>
         <div className='new-chat'>
           <div className='selected-language'>
