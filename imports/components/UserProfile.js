@@ -44,7 +44,6 @@ class UserProfile extends React.Component {
             <i className="fa fa-pencil" aria-hidden="true"></i>
           </div>
           <InlineEdit
-            // validate={this.customValidateText}
             activeClassName="editing"
             text={this.state.language}
             paramName="language"
@@ -58,7 +57,6 @@ class UserProfile extends React.Component {
             <i className="fa fa-pencil" aria-hidden="true"></i>
           </div>
           <InlineEdit
-            // validate={this.customValidateText}
             activeClassName="editing"
             text={this.state.learning}
             paramName="learning"
@@ -72,7 +70,6 @@ class UserProfile extends React.Component {
             <i className="fa fa-pencil" aria-hidden="true"></i>
           </div>
           <InlineEdit
-            // validate={this.customValidateText}
             activeClassName="editing"
             text={this.state.location}
             paramName="location"
@@ -86,7 +83,6 @@ class UserProfile extends React.Component {
             <i className="fa fa-pencil" aria-hidden="true"></i>
           </div>
           <InlineEdit
-            // validate={this.customValidateText}
             activeClassName="editing"
             text={this.state.bio}
             paramName="bio"
