@@ -5,13 +5,12 @@ import SelectLanguage from './SelectLanguage';
 import Matches from './Matches';
 
 const Dashboard = ({onlineUsers, language}) => {
-  console.log(onlineUsers)
   return (
     <div className='dashboard'>
       <div className='top'>
         <div className='video-box'>
           <div className='video-wrapper'>
-            VIDEO GOES HERE
+            {onlineUsers[0] ? onlineUsers[0].username : 'waiting'}
           </div>
         </div>
         <div className='current-profile'>
