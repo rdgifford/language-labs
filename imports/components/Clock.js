@@ -1,5 +1,4 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 
 class Clock extends React.Component {
   constructor(props) {
@@ -10,18 +9,12 @@ class Clock extends React.Component {
       seconds: 0,
       minutes: 0,
       printable: '0:00',
+      language: 'japanese'
     };
   }
 
   startClock() {
-    // console.log('this', this);
-    console.log('in startClock')
-    // setInterval(
-    //   this.setState({
-    //     time: this.state.time + 1
-    //   }).bind(this), 1000)
     setInterval(this.timerTick.bind(this), 1000);
-    // console.log(this.state.time);
   }
 
   timerTick() {
@@ -34,11 +27,15 @@ class Clock extends React.Component {
 
     var print = secs < 10 ? '0' + secs: '' + secs;
     print = mins + ':' + print;
+
+    //toggle between languages every 5 minutes
+    var language = mins % 10 < 5 ? 'japanese' : 'arabic';
     
     this.setState({
       seconds: secs,
       minutes: mins,
-      printable: print
+      printable: print,
+      language: language
     })
   }
 
@@ -47,6 +44,7 @@ class Clock extends React.Component {
       <div className='clock'>
         <button onClick={this.startClock.bind(this)}> Start timer </button>
         <h1> {this.state.printable} </h1>
+        <h3> It's time to speak {this.state.language} </h3>
       </div>
     )
   }
