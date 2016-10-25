@@ -1,10 +1,21 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
+import React             from 'react';
+import { Meteor }        from 'meteor/meteor';
 import AccountsUIWrapper from './accounts'
-import SelectLanguage from './SelectLanguage';
-import Matches from './Matches';
+import SelectLanguage    from './SelectLanguage';
+import Matches           from './Matches';
+import UserProfile       from './UserProfile'
+import Clock             from './Clock';
 
+<<<<<<< HEAD
 const Dashboard = ({onlineUsers, language}) => {
+=======
+const Dashboard = ({
+  onlineUsers, 
+  language, 
+  user
+}) => {
+  console.log(onlineUsers)
+>>>>>>> language-labs/master
   return (
     <div className='dashboard'>
       <div className='top'>
@@ -13,14 +24,17 @@ const Dashboard = ({onlineUsers, language}) => {
             {onlineUsers[0] ? onlineUsers[0].username : 'waiting'}
           </div>
         </div>
-        <div className='current-profile'>
-          <span className='sign-out'>
+        <div className='profile'>
+          <div className='sign-out'>
             <AccountsUIWrapper />
-          </span>
+          </div>
+          <UserProfile user={user}/>
         </div>
       </div>
       <div className='bottom'>
-        <div className='text-box'></div>
+        <div className='text-box'>
+          <Clock />
+        </div>
         <div className='new-chat'>
           <div className='selected-language'>
             Selected Language
