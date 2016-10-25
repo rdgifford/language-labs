@@ -5,6 +5,7 @@ import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile'
 import Clock             from './Clock';
+import TopicSuggestion   from './TopicSuggestion';
 
 <<<<<<< HEAD
 const Dashboard = ({onlineUsers, language}) => {
@@ -34,6 +35,7 @@ const Dashboard = ({
       <div className='bottom'>
         <div className='text-box'>
           <Clock />
+          <TopicSuggestion />
         </div>
         <div className='new-chat'>
           <div className='selected-language'>

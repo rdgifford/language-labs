@@ -3,7 +3,6 @@ import React from 'react';
 class Clock extends React.Component {
   constructor(props) {
     super(props)
-    var time = 0;
 
     this.state = { 
       seconds: 0,
@@ -36,7 +35,7 @@ class Clock extends React.Component {
       minutes: mins,
       printable: print,
       language: language
-    })
+    });
   }
 
   render() {
