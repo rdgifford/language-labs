@@ -115,10 +115,15 @@ body {
       box-shadow: $shadow;
 
       .video-wrapper {
-        width: 100%;
-        height: auto;
-        background-color: $blue;
+        width: auto;
+        height: 100%;
         text-align: center;
+
+        #theirVideo {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+        }
       }
     }
 

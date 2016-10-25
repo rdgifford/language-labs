@@ -9,6 +9,7 @@ const App = ({
   onlineUsers, 
   user, 
   loading,
+  peer
 }) => {
   if (!loading && user) {
     if (!user.profile) {
@@ -20,6 +21,7 @@ const App = ({
         <Dashboard 
           onlineUsers={onlineUsers} 
           language={user.profile.language}
+          peer={peer}
         />
       );
     }
