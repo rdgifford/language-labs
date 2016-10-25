@@ -1,8 +1,11 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
+import React             from 'react';
+import { Meteor }        from 'meteor/meteor';
 import AccountsUIWrapper from './accounts'
-import SelectLanguage from './SelectLanguage';
-import Matches from './Matches';
+import SelectLanguage    from './SelectLanguage';
+import Matches           from './Matches';
+import UserProfile       from './UserProfile'
+import Clock             from './Clock';
+import TopicSuggestion   from './TopicSuggestion';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -28,14 +31,18 @@ class Dashboard extends React.Component {
               <video id="theirVideo" muted="true" autoPlay="true"></video>
             </div>
           </div>
-          <div className='current-profile'>
-            <span className='sign-out'>
+          <div className='profile'>
+            <div className='sign-out'>
               <AccountsUIWrapper />
-            </span>
+            </div>
+            <UserProfile user={this.props.user}/>
           </div>
         </div>
         <div className='bottom'>
-          <div className='text-box'></div>
+          <div className='text-box'>
+            <Clock />
+            <TopicSuggestion />
+          </div>
           <div className='new-chat'>
             <div className='selected-language'>
               Selected Language

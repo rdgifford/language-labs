@@ -22,6 +22,7 @@ const App = ({
           onlineUsers={onlineUsers} 
           language={user.profile.language}
           peer={peer}
+          user={user}
         />
       );
     }

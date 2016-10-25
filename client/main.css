@@ -1,1 +1,13 @@
 /* CSS declarations go here */
+
+/* These are temporary classes... just to make it so .suggestion and .clock
+ * aren't on top of each other
+*/
+.suggestion {
+  float: right;
+}
+
+.clock {
+  float: left;
+  margin-right: 40px;
+}
