@@ -24,6 +24,5 @@ accounts-password@1.3.0
 tmeasday:presence
 check@1.2.3
 react-meteor-data
-force-ssl@1.0.12
 fourseven:scss
 gadicc:blaze-react-component
