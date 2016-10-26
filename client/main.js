@@ -5,6 +5,7 @@ import { Meteor }          from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import '../imports/accountsConfig.js';
+import '../imports/peer.js';
 import './styles.scss';
 
 /* ------------------------- PEER.JS BEGIN ------------------------- */
