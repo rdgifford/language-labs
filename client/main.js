@@ -49,7 +49,7 @@ navigator.getUserMedia = (
 );
 
 // get audio/video
-navigator.getUserMedia({audio:false, video: true}, function (stream) {
+navigator.getUserMedia({audio: true, video: true}, function (stream) {
   window.localStream = stream;
 }, function (error) { 
   console.log(error); 
