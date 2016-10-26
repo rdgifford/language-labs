@@ -40,7 +40,7 @@ class Dashboard extends React.Component {
           <div className='video-box'>
             {this.state.inCall && 
               <div className='video-wrapper'>
-                <video id="theirVideo" muted="true" autoPlay="true"></video>
+                <video id='theirVideo' autoPlay='true'></video>
                 <h1> Im in a call right now! </h1>
               </div>
             }
