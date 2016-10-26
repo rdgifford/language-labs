@@ -20,7 +20,7 @@ class TopicSuggestion extends React.Component {
 
   render () {
     return (
-      <div className='suggetion'>
+      <div className='suggestion'>
         <button onClick={this.randomTopic.bind(this)}> New Topic Idea </button>
         <h5> Maybe you can talk about... </h5>
         <h3> {this.state.currentTopic} </h3>

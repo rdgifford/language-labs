@@ -9,5 +9,8 @@
 
 .clock {
   float: left;
-  margin-right: 40px;
+}
+
+.toggleCall {
+  margin: 0 auto 0 auto;
 }

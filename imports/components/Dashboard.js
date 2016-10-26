@@ -6,10 +6,15 @@ import Matches           from './Matches';
 import UserProfile       from './UserProfile'
 import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
+import Review            from './Review';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      inCall: true
+    };
   }
 
   startChat(user, peer) {
@@ -22,14 +27,26 @@ class Dashboard extends React.Component {
     });
   }
 
+  toggleCall() {
+    this.setState({
+      inCall: !this.state.inCall
+    })
+  }
+
   render() {
     return (
       <div className='dashboard'>
         <div className='top'>
           <div className='video-box'>
-            <div className='video-wrapper'>
-              <video id="theirVideo" muted="true" autoPlay="true"></video>
-            </div>
+            {this.state.inCall && 
+              <div className='video-wrapper'>
+                <video id="theirVideo" muted="true" autoPlay="true"></video>
+                <h1> Im in a call right now! </h1>
+              </div>
+            }
+            {!this.state.inCall &&
+                <Review />
+            }
           </div>
           <div className='profile'>
             <div className='sign-out'>
@@ -42,6 +59,8 @@ class Dashboard extends React.Component {
           <div className='text-box'>
             <Clock />
             <TopicSuggestion />
+            {/*This button toggles call on/off to conditionally render call or review logic */}
+            <button className='toggleCall' onClick={this.toggleCall.bind(this)}> Toggle call </button>
           </div>
           <div className='new-chat'>
             <div className='selected-language'>
