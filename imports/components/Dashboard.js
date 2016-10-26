@@ -21,9 +21,12 @@ class Dashboard extends React.Component {
     var outgoingCall = peer.call(user.profile.peerId, window.localStream);
     window.currentCall = outgoingCall;
     outgoingCall.on('stream', function (remoteStream) {
+      var myVideo = document.getElementById('myVideo');
+      myVideo.src = URL.createObjectURL(window.localStream);
+
       window.remoteStream = remoteStream;
-      var video = document.getElementById('theirVideo')
-      video.src = URL.createObjectURL(remoteStream);
+      var theirVideo = document.getElementById('theirVideo')
+      theirVideo.src = URL.createObjectURL(remoteStream);
     });
   }
 
@@ -41,6 +44,7 @@ class Dashboard extends React.Component {
             {this.state.inCall && 
               <div className='video-wrapper'>
                 <video id='theirVideo' autoPlay='true'></video>
+                <video id='myVideo' muted='true' autoPlay='true'></video>
                 <h1> Im in a call right now! </h1>
               </div>
             }
