@@ -13,20 +13,49 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      inCall: true
+      inCall: false,
+      callDone: false
     };
   }
 
-  startChat(user, peer) {
-    var outgoingCall = peer.call(user.profile.peerId, window.localStream);
-    window.currentCall = outgoingCall;
-    outgoingCall.on('stream', function (remoteStream) {
-      var myVideo = document.getElementById('myVideo');
-      myVideo.src = URL.createObjectURL(window.localStream);
+  startChat(users, peer) {
+    // get html video elements
+    var myVideo = this.refs.myVideo;
+    var theirVideo = this.refs.theirVideo;
+    
+    // get audio/video permissions
+    navigator.getUserMedia({audio: true, video: true}, function (stream) {  
+      // show own videostream of user
+      myVideo.src = URL.createObjectURL(stream);
+      
+      // give the current user a peerId
+      Meteor.users.update({_id: Meteor.userId()}, {
+        $set: {
+          profile: {
+            peerId: peer.id,
+            language: 'German'
+          }
+        }
+      });
 
-      window.remoteStream = remoteStream;
-      var theirVideo = document.getElementById('theirVideo')
-      theirVideo.src = URL.createObjectURL(remoteStream);
+      // find other person to call
+      var user = users[0];
+
+      // receive a call from other person
+      peer.on('call', function (incomingCall) {
+        incomingCall.answer(stream);
+        incomingCall.on('stream', function (theirStream) {
+          theirVideo.src = URL.createObjectURL(theirStream);
+        });
+      });
+
+      // if call not received first, call other person
+      var outgoingCall = peer.call(user.profile.peerId, stream);
+      outgoingCall.on('stream', function (theirStream) {
+        theirVideo.src = URL.createObjectURL(theirStream);
+      });
+    }, function (error) { 
+      console.log(error); 
     });
   }
 
@@ -41,13 +70,11 @@ class Dashboard extends React.Component {
       <div className='dashboard'>
         <div className='top'>
           <div className='video-box'>
-            {this.state.inCall && 
-              <div className='video-wrapper'>
-                <video id='myVideo' muted='true' autoPlay='true'></video>
-                <video id='theirVideo' autoPlay='true'></video>
-              </div>
-            }
-            {!this.state.inCall &&
+            <div className='video-wrapper'>
+              <video ref='myVideo' id='myVideo' muted='true' autoPlay='true'></video>
+              <video ref='theirVideo' id='theirVideo' autoPlay='true'></video>
+            </div>
+            {!this.state.inCall && this.state.callDone &&
                 <Review />
             }
           </div>
@@ -73,8 +100,8 @@ class Dashboard extends React.Component {
               {this.props.language}
             </div>
             <div className='button-wrapper'>
-              <button onClick={() => this.startChat(this.props.onlineUsers[0], this.props.peer)}>
-                {this.props.onlineUsers[0] ? 'Start Chat' : 'Waiting'}
+              <button onClick={() => this.startChat(this.props.onlineUsers, this.props.peer)}>
+                {!this.state.inCall ? 'Start Chat' : 'Waiting'}
               </button>
             </div>
           </div>
@@ -85,9 +112,3 @@ class Dashboard extends React.Component {
 };
 
 export default Dashboard;
-
-// <Matches 
-//   matches={onlineUsers.filter(u => (
-//     u.profile.language === language
-//   ))} 
-// />
