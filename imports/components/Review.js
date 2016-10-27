@@ -1,10 +1,10 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import Stars from './Stars';
 
 class Review extends React.Component {
   constructor() {
     super();
-    this.state = {value: ''};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -13,17 +13,19 @@ class Review extends React.Component {
     this.setState({value: event.target.value});
   }
 
-  handleSubmit() {
+  handleSubmit(rating) {
     //As it is, this will select the current users profile. Later, we just need to switch the
     //Meteor.user().profile.peerId with the peerId of whoever they are paired with to rate other person instead
     var user = Meteor.users.findOne({ 'profile.peerId': Meteor.user().profile.peerId });
 
     var reviews = user.profile.reviews || [];
 
-    reviews.push(this.state.value);
+    reviews.push(rating);
 
-    Meteor.users.update({_id: user._id}, {$set: {"profile.reviews": reviews}});
+    Meteor.users.update({_id: user._id}, {$set: {'profile.reviews': reviews}});
     //This same format can be used to easily add different review values in whatever domains we want
+  
+    console.log('Users current reviews', Meteor.user().profile.reviews);
   }
 
 
@@ -32,14 +34,9 @@ class Review extends React.Component {
       <div className='Review'>
         <h4> Please help <i>{Meteor.user().username}</i> by giving them some feedback</h4>
         <h2> Rate how helpful they were on a scale of 1 to 5 </h2>
-        <input type='text' 
-          placeholder='1 - 5'
-          value={this.state.value}
-          onChange={this.handleChange}
-          />
-        <button onClick={this.handleSubmit}> Submit </button>
+        <Stars submit={this.handleSubmit.bind(this)} />
       </div>
-    )
+    );
   }
 }
 
