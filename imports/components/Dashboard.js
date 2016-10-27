@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      inCall: false,
+      inCall: true,
       callDone: false
     };
   }
@@ -60,9 +60,10 @@ class Dashboard extends React.Component {
   }
 
   toggleCall() {
+    console.log('incall', this.state.inCall);
     this.setState({
       inCall: !this.state.inCall
-    })
+    });
   }
 
   render() {
@@ -74,7 +75,8 @@ class Dashboard extends React.Component {
               <video ref='myVideo' id='myVideo' muted='true' autoPlay='true'></video>
               <video ref='theirVideo' id='theirVideo' autoPlay='true'></video>
             </div>
-            {!this.state.inCall && this.state.callDone &&
+          {/*We'll need to figure out how to switch between video view and review view elegantly*/}
+            {!this.state.inCall &&
                 <Review />
             }
           </div>
