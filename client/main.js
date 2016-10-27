@@ -7,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import '../imports/accountsConfig.js';
 import './styles.scss';
 
-/* ------------------------- PEER.JS BEGIN ------------------------- */
+/* ------------------------- PEER.JS INIT ------------------------- */
 const peer = new Peer({
   key: 'zzak1w02wffuhaor',
   debug: 3,
@@ -17,43 +17,11 @@ const peer = new Peer({
   ]}
 });
 
-// This event: remote peer receives a call
-peer.on('open', function () {
-  // update the current user's profile
-  Meteor.users.update({_id: Meteor.userId()}, {
-    $set: {
-      profile: {
-        peerId: peer.id,
-        language: 'German'
-      }
-    }
-  });
-});
-
-// This event: remote peer receives a call
-peer.on('call', function (incomingCall) {
-  window.currentCall = incomingCall;
-  incomingCall.answer(window.localStream);
-  incomingCall.on('stream', function (remoteStream) {
-    window.remoteStream = remoteStream;
-    var video = document.getElementById('theirVideo')
-    video.src = URL.createObjectURL(remoteStream);
-  });
-});
-
-navigator.getUserMedia = (
+navigator.getUserMedia =
   navigator.getUserMedia ||
   navigator.webkitGetUserMedia ||
   navigator.mozGetUserMedia ||
-  navigator.msGetUserMedia
-);
-
-// get audio/video
-navigator.getUserMedia({audio: true, video: true}, function (stream) {
-  window.localStream = stream;
-}, function (error) { 
-  console.log(error); 
-});
+  navigator.msGetUserMedia;
 /* -------------------------- PEER.JS END -------------------------- */
 
 const AppContainer = createContainer(() => {
