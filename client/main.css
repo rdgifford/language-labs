@@ -14,3 +14,34 @@
 .toggleCall {
   margin: 0 auto 0 auto;
 }
+
+h1, h2, h3, h4, h5 {
+  color: #5fa9d9;
+}
+
+.review-submit {
+  cursor: pointer;
+  display: visible;
+  height: 50px;
+  width: 100px;
+  border-radius: 10%;
+  border: 3px solid #5fa9d9;
+  background-color: transparent;
+  color: #5fa9d9;
+  margin-left: 40px;
+  font-size: 14px;
+  transition: all .3s;
+}
+
+.review-submit:hover {
+  background-color: #5fa9d9;
+  color: white;
+}
+
+.review-submit:focus {
+	outline: none;
+}
+
+.review {
+  z-index: -1000;
+}
