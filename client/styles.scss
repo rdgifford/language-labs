@@ -114,6 +114,41 @@ body {
       border-radius: 4px;
       box-shadow: $shadow;
 
+      .review {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .stars {
+          text-align: center;
+          cursor: pointer;
+
+          i {
+            margin-right: 2px;
+            nargin-left: 2px;
+          }
+        }
+
+        .review-submit {
+          cursor: pointer;
+          font-family: 'quicksand';
+          font-size: 14px;
+          border: 1px solid $blue;
+          background-color: transparent;
+          color: $blue;
+          border-radius: 4px;
+          height: 30px;
+          width: 130px;
+          transition: all .3s;
+
+          &:hover {
+            color: white;
+            background-color: $blue;
+          }
+        }
+      }
+
       .video-wrapper {
         position: relative;
         display: flex;
