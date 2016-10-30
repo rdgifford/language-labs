@@ -37,7 +37,6 @@ class Review extends React.Component {
         </span>
         <h2> How was your conversation? </h2>
         <Stars 
-          className='stars'
           submit={this.handleSubmit.bind(this)} 
         />
       </div>

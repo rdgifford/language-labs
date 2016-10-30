@@ -31,12 +31,7 @@ class Dashboard extends React.Component {
       
       // give the current user a peerId
       Meteor.users.update({_id: Meteor.userId()}, {
-        $set: {
-          profile: {
-            peerId: peer.id,
-            language: 'German'
-          }
-        }
+        $set: { 'profile.peerId': peer.id }
       });
 
       // find other person to call
@@ -87,8 +82,8 @@ class Dashboard extends React.Component {
                   ref='myVideo' 
                   id='myVideo' 
                   muted='true' 
-                  autoPlay='true'>
-                </video>
+                  autoPlay='true'
+                ></video>
                 <video 
                   ref='theirVideo' 
                   id='theirVideo' 
