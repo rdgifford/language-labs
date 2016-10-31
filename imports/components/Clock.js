@@ -1,14 +1,20 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 
 class Clock extends React.Component {
   constructor(props) {
     super(props);
 
+    //Create array of language options, sorted alphabetically
+    var user = Meteor.user().profile;
+    var languages = [user.language, user.learning];
+    languages.sort();
+
     this.state = { 
       seconds: 0,
       minutes: 0,
       printable: '0:00',
-      language: 'japanese',
+      languages: languages,
       timerUnused: true
     };
   }
@@ -34,7 +40,7 @@ class Clock extends React.Component {
     print = mins + ':' + print;
 
     //toggle between languages every 5 minutes
-    var language = mins % 10 < 5 ? 'japanese' : 'arabic';
+    var language = mins % 10 < 5 ? this.state.languages[0] : this.state.languages[1];
     
     this.setState({
       seconds: secs,
