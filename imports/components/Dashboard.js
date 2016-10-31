@@ -1,9 +1,9 @@
 import React             from 'react';
 import { Meteor }        from 'meteor/meteor';
-import AccountsUIWrapper from './accounts'
+import AccountsUIWrapper from './accounts';
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
-import UserProfile       from './UserProfile'
+import UserProfile       from './UserProfile';
 import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
@@ -81,7 +81,7 @@ class Dashboard extends React.Component {
         var outgoingCall = peer.call(user.profile.peerId, stream);
         dashboard.setState({ currentCall: outgoingCall });
         outgoingCall.on('stream', function (theirStream) {
-          dashboard.toggleLoading(false)
+          dashboard.toggleLoading(false);
           theirVideo.src = URL.createObjectURL(theirStream);
           dashboard.setPartner(theirStream.id);
         });
@@ -115,15 +115,15 @@ class Dashboard extends React.Component {
     });
   }
 
-  toggleLoading(loading){
+  toggleLoading(loading) {
     this.setState({
       callLoading: loading
-    })
+    });
   }
 
   setPartner(id) {
     console.log('THEIR STREAMID BEING WRITTEN AFTER RECEIVING A CALL', id);
-    const partner = Meteor.users.findOne({ 'profile.streamId': id })
+    const partner = Meteor.users.findOne({ 'profile.streamId': id });
     console.log('PARTNER', partner);
     this.setState({
       partner: partner
@@ -163,7 +163,7 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <div className='text-box'>
-            <Clock />
+            <Clock partner={this.state.partner} />
             <TopicSuggestion />
           </div>
           <div className='new-chat'>
@@ -193,6 +193,6 @@ class Dashboard extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default Dashboard;
