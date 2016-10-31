@@ -76,7 +76,7 @@ class Dashboard extends React.Component {
           var outgoingCall = peer.call(user.profile.peerId, stream);
           dashboard.setState({ currentCall: outgoingCall });
           outgoingCall.on('stream', function (theirStream) {
-            dashboard.toggleLoading(false)
+            dashboard.toggleLoading(false);
             theirVideo.src = URL.createObjectURL(theirStream);
             dashboard.setPartner(theirStream.id);
           });
@@ -159,7 +159,7 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <div className='text-box'>
-            <Clock partner={this.state.partner} />
+            <Clock partner={this.state.partner} callDone={this.state.callDone} />
             <TopicSuggestion />
           </div>
           <div className='new-chat'>
