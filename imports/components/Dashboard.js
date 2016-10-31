@@ -4,6 +4,7 @@ import AccountsUIWrapper from './accounts';
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile';
+import Stats             from './Stats';
 import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
@@ -178,7 +179,7 @@ class Dashboard extends React.Component {
             }
             {
               !this.state.partner &&
-              <div>Waiting for match</div>
+              <Stats />
             }
           </div>
           <div className='new-chat'>
