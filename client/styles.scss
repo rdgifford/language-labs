@@ -5,6 +5,10 @@ $blue: #5fa9d9;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
 
+* {
+    outline: none !important;
+}
+
 body {
   margin: 0px;
   font-family: 'quicksand' !important;

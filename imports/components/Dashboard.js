@@ -173,7 +173,10 @@ class Dashboard extends React.Component {
               }
             </div>
             <div className='button-wrapper'>
-              {!this.state.currentCall &&
+              {!this.props.onlineUsers[0] &&
+                <button>Waiting</button>
+              }
+              {this.props.onlineUsers[0] && !this.state.currentCall &&
                 <button onClick={this.startChat.bind(this, this.props.onlineUsers, this.props.peer)}>
                   Start Chat
                 </button>
