@@ -9,8 +9,7 @@ class Clock extends React.Component {
       minutes: 0,
       printable: '0:00',
       language: 'japanese',
-      timerUnused: true,
-      partner: false
+      timerUnused: true
     };
   }
 
@@ -19,16 +18,9 @@ class Clock extends React.Component {
     this.setState({
       timerUnused: false,
       timerInterval: timerInterval,
-      partner: true
     });
   }
 
-  endClock() {
-    console.log('ending da timer');
-    this.setState({
-      partner: false
-    });
-  }
 
   timerTick() {
     var secs = this.state.seconds + 1;
@@ -53,22 +45,17 @@ class Clock extends React.Component {
   }
 
   render() {
+    //Start timer when video chat starts
     if (this.props.partner && this.state.timerUnused) {
       this.startClock();
     }
-    /*
-    Stops timer on button click. This will eventually be changed
-    to look at this.props.partner instead, but that needs to be rechanged
-    to false on an end call first. Once that happens, we can take out all
-    the partner state attributes in this component
-    */
-    if (!this.state.partner) {
+    //Stop timer when call is done
+    if (this.props.callDone) {
       clearInterval(this.state.timerInterval);
     }
 
     return (
       <div className='clock'>
-        <button onClick={this.endClock.bind(this)}> End timer </button>
         <h1> {this.state.printable} </h1>
         <h3> It's time to speak {this.state.language} </h3>
       </div>
