@@ -6,7 +6,7 @@ Meteor.startup(function () {
     return Presences.find({}, { userId: true });
   });
 
-  Meteor.publish("users", function () {
+  Meteor.publish('users', function () {
     return Meteor.users.find({});
   });
 
@@ -16,6 +16,6 @@ Meteor.startup(function () {
         { $set: { 'reviews': newReviews } 
       });
     }
-  })
+  });
 });
 

@@ -43,6 +43,7 @@ class Rating extends React.Component {
     this.setState({
       rating: index + 1
     });
+    this.props.starClick(index + 1);
   }
 
   render() {
