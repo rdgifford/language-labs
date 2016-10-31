@@ -7,6 +7,7 @@ import UserProfile       from './UserProfile'
 import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
+import Waiting           from './Waiting';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class Dashboard extends React.Component {
     this.state = {
       localStream: false,
       currentCall: false,
-      callDone: false
+      callDone: false,
+      callLoading: false,
+      partner: false
     };
 
     this.startChat.bind(this);
@@ -23,25 +26,29 @@ class Dashboard extends React.Component {
   }
 
   startChat(users, peer) {
+    // save context
     var dashboard = this;
+
     // get html video elements
     var myVideo = this.refs.myVideo;
     var theirVideo = this.refs.theirVideo;
     
     // get audio/video permissions
-    navigator.getUserMedia({audio: true, video: true}, function (stream) {
+    navigator.getUserMedia({ audio: true, video: true }, function (stream) {
+      // save your users own feed to state
       dashboard.setState({ localStream: stream });
+
+      // show loading screen
+      dashboard.toggleLoading(true);
 
       // show own videostream of user
       myVideo.src = URL.createObjectURL(stream);
-      
-      // give the current user a peerId
+
+      // give the current user a peerId and save their streamId
       Meteor.users.update({_id: Meteor.userId()}, {
         $set: {
-          profile: {
-            peerId: peer.id,
-            language: 'German'
-          }
+          'profile.peerId': peer.id,
+          'profile.streamId': stream.id
         }
       });
 
@@ -49,30 +56,40 @@ class Dashboard extends React.Component {
       var user = users[0];
 
       // receive a call from other person
-      peer.on('call', function (incomingCall) {
-        dashboard.setState({ currentCall: incomingCall });
-        incomingCall.answer(stream);
-        incomingCall.on('stream', function (theirStream) {
+      if (!dashboard.state.currentCall) {
+        peer.on('call', function (incomingCall) {
+          dashboard.setState({ currentCall: incomingCall });
+          incomingCall.answer(stream);
+          incomingCall.on('stream', function (theirStream) {
+            dashboard.toggleLoading(false);
+            theirVideo.src = URL.createObjectURL(theirStream);
+            console.log('DASHBOARD PARTNER AFTER RECEIVING A CALL', dashboard.state.partner);
+            dashboard.setPartner(theirStream.id);
+            console.log('DASHBOARD PARTNER JUST AFTER SETTING PARTNER', dashboard.state.partner);
+          });
+
+          // if other person ends chat, end chat too
+          incomingCall.on('close', function() {
+            dashboard.endChat();
+          });
+        });
+      }
+
+      // if call not received first, call other person
+      if (!dashboard.state.currentCall) {
+        var outgoingCall = peer.call(user.profile.peerId, stream);
+        dashboard.setState({ currentCall: outgoingCall });
+        outgoingCall.on('stream', function (theirStream) {
+          dashboard.toggleLoading(false)
           theirVideo.src = URL.createObjectURL(theirStream);
+          dashboard.setPartner(theirStream.id);
         });
 
         // if other person ends chat, end chat too
-        incomingCall.on('close', function() {
+        outgoingCall.on('close', function() {
           dashboard.endChat();
         });
-      });
-
-      // if call not received first, call other person
-      var outgoingCall = peer.call(user.profile.peerId, stream);
-      dashboard.setState({ currentCall: outgoingCall });
-      outgoingCall.on('stream', function (theirStream) {
-        theirVideo.src = URL.createObjectURL(theirStream);
-      });
-
-      // if other person ends chat, end chat too
-      outgoingCall.on('close', function() {
-        dashboard.endChat();
-      });
+      }
     }, function (error) { 
       console.log(error); 
     });
@@ -97,9 +114,18 @@ class Dashboard extends React.Component {
     });
   }
 
-  toggleCall() {
+  toggleLoading(loading){
     this.setState({
-      currentCall: !this.state.currentCall
+      callLoading: loading
+    })
+  }
+
+  setPartner(id) {
+    console.log('THEIR STREAMID BEING WRITTEN AFTER RECEIVING A CALL', id);
+    const partner = Meteor.users.findOne({ 'profile.streamId': id })
+    console.log('PARTNER', partner);
+    this.setState({
+      partner: partner
     });
   }
 
@@ -110,14 +136,18 @@ class Dashboard extends React.Component {
           <div className='video-box'>
             {!this.state.callDone &&
               <div className='video-wrapper'>
-                <video ref='myVideo' id='myVideo' muted='true' autoPlay='true'></video>
-                <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'></video>
+                {this.state.callLoading &&
+                  <Waiting />
+                }
+                <video ref='myVideo' id='myVideo' muted='true' autoPlay='true' 
+                  className={this.state.callLoading ? 'hidden' : null}></video>
+                <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'
+                  className={this.state.callLoading ? 'hidden' : null}></video>
               </div>
             }
 
-            {/*We'll need to figure out how to switch between video view and review view elegantly*/}
             {!this.state.currentCall && this.state.callDone &&
-              <Review />
+              <Review partner={this.state.partner}/>
             }
           </div>
           <div className='profile'>
@@ -131,15 +161,16 @@ class Dashboard extends React.Component {
           <div className='text-box'>
             <Clock />
             <TopicSuggestion />
-            {/*This button toggles call on/off to conditionally render call or review logic */}
-            <button className='toggleCall' onClick={this.toggleCall.bind(this)}> Toggle call </button>
           </div>
           <div className='new-chat'>
             <div className='selected-language'>
-              Selected Language
+              Selected Languages
             </div>
             <div className='language'>
-              {this.props.language}
+              {
+               `${this.props.user.profile.language} / 
+                ${this.props.user.profile.learning}`
+              }
             </div>
             <div className='button-wrapper'>
               {!this.state.currentCall &&

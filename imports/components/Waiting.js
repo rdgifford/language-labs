@@ -2,7 +2,9 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
 const Waiting = () => (
-  <p>waiting for matches</p>
+  <div className='waiting'>
+    <div className='loader'></div>
+  </div>
 );
 
 export default Waiting;
