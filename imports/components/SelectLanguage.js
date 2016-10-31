@@ -18,7 +18,7 @@ class SelectLanguage extends React.Component {
           placeholder:  'Where are you located?',
           propertyName: 'location'
         },{ 
-          placeholder:  'List some of your interests.',
+          placeholder:  'What are some of your interests?',
           propertyName: 'interests',
           instructions: 'Place a comma after each entry'
         }
