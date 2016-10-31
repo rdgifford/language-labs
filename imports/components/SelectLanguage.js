@@ -58,7 +58,7 @@ class SelectLanguage extends React.Component {
          </div>
           <input 
             type="text" 
-            onfocus={()=> this.languageInput.placeholder = ''}
+            onFocus={()=> this.languageInput.placeholder = ''}
             placeholder={this.state.stages[this.state.currentStage].placeholder}
             ref={(ref) => this.languageInput = ref}
           />
