@@ -171,7 +171,7 @@ class Dashboard extends React.Component {
           <div className='text-box'>
             { 
               this.state.partner &&
-              <div>
+              <div className='clock-suggestion-wrapper'>
                 <Clock partner={this.state.partner} callDone={this.state.callDone} />
                 <TopicSuggestion partner={this.state.partner}/>
               </div>
