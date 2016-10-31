@@ -7,6 +7,7 @@ import UserProfile       from './UserProfile'
 import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
+import Waiting           from './Waiting';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class Dashboard extends React.Component {
     this.state = {
       inCall: false,
       callDone: true,
-      initialCall: true
+      initialCall: true,
+      callLoading: false,
+      partner: null
     };
   }
 
@@ -23,15 +26,20 @@ class Dashboard extends React.Component {
     // get html video elements
     var myVideo = this.refs.myVideo;
     var theirVideo = this.refs.theirVideo;
+    var context = this;
     
     // get audio/video permissions
     navigator.getUserMedia({audio: true, video: true}, function (stream) {  
       // show own videostream of user
       myVideo.src = URL.createObjectURL(stream);
-      
+
       // give the current user a peerId
       Meteor.users.update({_id: Meteor.userId()}, {
         $set: { 'profile.peerId': peer.id }
+      });
+
+      Meteor.users.update({_id: Meteor.userId()}, {
+        $set: { 'profile.streamId': stream.id }
       });
 
       // find other person to call
@@ -41,14 +49,18 @@ class Dashboard extends React.Component {
       peer.on('call', function (incomingCall) {
         incomingCall.answer(stream);
         incomingCall.on('stream', function (theirStream) {
+          context.toggleLoading(false);
           theirVideo.src = URL.createObjectURL(theirStream);
+          context.setPartner(theirStream.id);
         });
       });
 
       // if call not received first, call other person
       var outgoingCall = peer.call(user.profile.peerId, stream);
       outgoingCall.on('stream', function (theirStream) {
+        context.toggleLoading(false)
         theirVideo.src = URL.createObjectURL(theirStream);
+        context.setPartner(theirStream.id);
       });
     }, function (error) { 
       console.log(error); 
@@ -56,7 +68,6 @@ class Dashboard extends React.Component {
   }
 
   toggleCall() {
-
     if (this.state.initialCall) {
       this.setState({
         initialCall: false,
@@ -69,6 +80,23 @@ class Dashboard extends React.Component {
         callDone: !this.state.callDone
       });
     }
+
+    if (this.state.callLoading === false) {
+      this.toggleLoading(true)
+    }
+  }
+
+  toggleLoading(loading){
+    this.setState({
+      callLoading: loading
+    })
+  }
+
+  setPartner(id) {
+   const partner = Meteor.users.findOne({"profile.streamId": id})
+   this.setState({
+    partner: partner
+   });
   }
 
   render() {
@@ -78,6 +106,7 @@ class Dashboard extends React.Component {
           <div className='video-box'>
             {this.state.inCall ?
               <div className='video-wrapper'>
+                {this.state.callLoading ? <Waiting /> : null}
                 <video 
                   ref='myVideo' 
                   id='myVideo' 
@@ -88,11 +117,12 @@ class Dashboard extends React.Component {
                   ref='theirVideo' 
                   id='theirVideo' 
                   autoPlay='true'
+                  className={this.state.callLoading ? 'hidden' : null}
                 ></video>
               </div>
-              : this.state.callDone && !this.state.initialCall
-                ? <Review />
-                : <p>Waiting</p>
+              : this.state.callDone && !this.state.initialCall 
+                ? <Review partner={this.state.partner}/>
+                : <Waiting />
             }
           </div>
           <div className='profile'>
@@ -105,8 +135,7 @@ class Dashboard extends React.Component {
         <div className='bottom'>
           <div className='text-box'>
             <Clock />
-            <TopicSuggestion />
-            {/*This button toggles call on/off to conditionally render call or review logic */}
+            <TopicSuggestion  />
           </div>
           <div className='new-chat'>
             <div className='selected-language'>

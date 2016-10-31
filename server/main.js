@@ -10,4 +10,12 @@ Meteor.startup(function () {
     return Meteor.users.find({});
   });
 
+  Meteor.methods({
+    'updateRating'({newReviews, _id}) {
+      Meteor.users.update(_id,
+        { $set: { 'reviews': newReviews } 
+      });
+    }
+  })
 });
+
