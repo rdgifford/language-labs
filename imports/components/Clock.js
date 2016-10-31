@@ -11,8 +11,8 @@ class Clock extends React.Component {
     languages.sort();
 
     this.state = { 
-      seconds: 55,
-      minutes: 4,
+      seconds: 0,
+      minutes: 0,
       printable: '0:00',
       languages: languages,
       timerUnused: true
