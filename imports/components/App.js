@@ -28,9 +28,13 @@ const App = ({
         <SelectLanguage id={Meteor.userId()} /> 
       );
     } else {
+
       return (
         <Dashboard 
-          onlineUsers={onlineUsers} 
+          onlineUsers={onlineUsers.filter(u => (
+            u.profile.language.toLowerCase() === user.profile.learning.toLowerCase() 
+            && u.profile.learning.toLowerCase() === user.profile.language.toLowerCase()
+          ))}
           language={user.profile.language}
           peer={peer}
           user={user}
