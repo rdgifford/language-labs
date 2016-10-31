@@ -13,18 +13,25 @@ class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      inCall: true,
+      localStream: false,
+      currentCall: false,
       callDone: false
     };
+
+    this.startChat.bind(this);
+    this.endChat.bind(this);
   }
 
   startChat(users, peer) {
+    var dashboard = this;
     // get html video elements
     var myVideo = this.refs.myVideo;
     var theirVideo = this.refs.theirVideo;
     
     // get audio/video permissions
-    navigator.getUserMedia({audio: true, video: true}, function (stream) {  
+    navigator.getUserMedia({audio: true, video: true}, function (stream) {
+      dashboard.setState({ localStream: stream });
+
       // show own videostream of user
       myVideo.src = URL.createObjectURL(stream);
       
@@ -43,26 +50,56 @@ class Dashboard extends React.Component {
 
       // receive a call from other person
       peer.on('call', function (incomingCall) {
+        dashboard.setState({ currentCall: incomingCall });
         incomingCall.answer(stream);
         incomingCall.on('stream', function (theirStream) {
           theirVideo.src = URL.createObjectURL(theirStream);
+        });
+
+        // if other person ends chat, end chat too
+        incomingCall.on('close', function() {
+          dashboard.endChat();
         });
       });
 
       // if call not received first, call other person
       var outgoingCall = peer.call(user.profile.peerId, stream);
+      dashboard.setState({ currentCall: outgoingCall });
       outgoingCall.on('stream', function (theirStream) {
         theirVideo.src = URL.createObjectURL(theirStream);
+      });
+
+      // if other person ends chat, end chat too
+      outgoingCall.on('close', function() {
+        dashboard.endChat();
       });
     }, function (error) { 
       console.log(error); 
     });
   }
 
+  endChat() {
+    // close peerjs connection
+    this.state.currentCall.close();
+ 
+    // turn off camera and microphone
+    this.state.localStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+
+    // remove streams from html video elements
+    this.refs.myVideo.src = null;
+    this.refs.theirVideo.src = null;
+    
+    this.setState({ 
+      currentCall: false,
+      callDone: true 
+    });
+  }
+
   toggleCall() {
-    console.log('incall', this.state.inCall);
     this.setState({
-      inCall: !this.state.inCall
+      currentCall: !this.state.currentCall
     });
   }
 
@@ -71,13 +108,16 @@ class Dashboard extends React.Component {
       <div className='dashboard'>
         <div className='top'>
           <div className='video-box'>
-            <div className='video-wrapper'>
-              <video ref='myVideo' id='myVideo' muted='true' autoPlay='true'></video>
-              <video ref='theirVideo' id='theirVideo' autoPlay='true'></video>
-            </div>
-          {/*We'll need to figure out how to switch between video view and review view elegantly*/}
-            {!this.state.inCall &&
-                <Review />
+            {!this.state.callDone &&
+              <div className='video-wrapper'>
+                <video ref='myVideo' id='myVideo' muted='true' autoPlay='true'></video>
+                <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'></video>
+              </div>
+            }
+
+            {/*We'll need to figure out how to switch between video view and review view elegantly*/}
+            {!this.state.currentCall && this.state.callDone &&
+              <Review />
             }
           </div>
           <div className='profile'>
@@ -102,9 +142,16 @@ class Dashboard extends React.Component {
               {this.props.language}
             </div>
             <div className='button-wrapper'>
-              <button onClick={() => this.startChat(this.props.onlineUsers, this.props.peer)}>
-                {!this.state.inCall ? 'Start Chat' : 'Waiting'}
-              </button>
+              {!this.state.currentCall &&
+                <button onClick={this.startChat.bind(this, this.props.onlineUsers, this.props.peer)}>
+                  Start Chat
+                </button>
+              }
+              {this.state.currentCall &&
+                <button onClick={this.endChat.bind(this)}>
+                  End Chat
+                </button>
+              }
             </div>
           </div>
         </div>
