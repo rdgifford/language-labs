@@ -40,7 +40,10 @@ class Review extends React.Component {
         </span>
         <h2> How was your conversation? </h2>
         <Stars 
-          submit={this.handleSubmit.bind(this)} 
+          submit={()=> {
+            this.handleSubmit.call(this)
+            this.props.clearPartner()
+          }}
         />
       </div>
     );

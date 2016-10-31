@@ -126,6 +126,13 @@ class Dashboard extends React.Component {
     }
   }
 
+  clearPartner () {
+    this.setState({
+      partner: false,
+      callDone: false
+    });
+  }
+
   render() {
     return (
       <div className='dashboard'>
@@ -147,7 +154,10 @@ class Dashboard extends React.Component {
             }
 
             {!this.state.currentCall && this.state.callDone &&
-              <Review partner={this.state.partner}/>
+              <Review 
+                partner={this.state.partner}
+                clearPartner={this.clearPartner.bind(this)}
+              />
             }
           </div>
           <div className='profile'>
