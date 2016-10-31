@@ -56,41 +56,37 @@ class Dashboard extends React.Component {
       // find other person to call
       var user = users[0];
 
-      // receive a call from other person
-      if (!dashboard.state.currentCall) {
-        peer.on('call', function (incomingCall) {
-          dashboard.setState({ currentCall: incomingCall });
-          incomingCall.answer(stream);
-          incomingCall.on('stream', function (theirStream) {
-            dashboard.toggleLoading(false);
+      // setTimeout needed to ensure partner can be found
+      setTimeout(function() {
+        // receive a call from other person
+        if (!dashboard.state.currentCall) {
+          peer.on('call', function (incomingCall) {
+            dashboard.setState({ currentCall: incomingCall });
+            incomingCall.answer(stream);
+            incomingCall.on('stream', function (theirStream) {
+              dashboard.toggleLoading(false);
+              theirVideo.src = URL.createObjectURL(theirStream);
+              dashboard.setPartner(theirStream.id);
+            });
+          });
+        }
+
+        // if call not received first, call other person
+        if (!dashboard.state.currentCall) {
+          var outgoingCall = peer.call(user.profile.peerId, stream);
+          dashboard.setState({ currentCall: outgoingCall });
+          outgoingCall.on('stream', function (theirStream) {
+            dashboard.toggleLoading(false)
             theirVideo.src = URL.createObjectURL(theirStream);
-            console.log('DASHBOARD PARTNER AFTER RECEIVING A CALL', dashboard.state.partner);
             dashboard.setPartner(theirStream.id);
-            console.log('DASHBOARD PARTNER JUST AFTER SETTING PARTNER', dashboard.state.partner);
           });
-
-          // if other person ends chat, end chat too
-          incomingCall.on('close', function() {
-            dashboard.endChat();
-          });
-        });
-      }
-
-      // if call not received first, call other person
-      if (!dashboard.state.currentCall) {
-        var outgoingCall = peer.call(user.profile.peerId, stream);
-        dashboard.setState({ currentCall: outgoingCall });
-        outgoingCall.on('stream', function (theirStream) {
-          dashboard.toggleLoading(false);
-          theirVideo.src = URL.createObjectURL(theirStream);
-          dashboard.setPartner(theirStream.id);
-        });
+        }
 
         // if other person ends chat, end chat too
-        outgoingCall.on('close', function() {
+        dashboard.state.currentCall.on('close', function() {
           dashboard.endChat();
         });
-      }
+      }, 200);
     }, function (error) { 
       console.log(error); 
     });
@@ -122,12 +118,12 @@ class Dashboard extends React.Component {
   }
 
   setPartner(id) {
-    console.log('THEIR STREAMID BEING WRITTEN AFTER RECEIVING A CALL', id);
-    const partner = Meteor.users.findOne({ 'profile.streamId': id });
-    console.log('PARTNER', partner);
-    this.setState({
-      partner: partner
-    });
+    var partner = Meteor.users.findOne({ 'profile.streamId': id });
+    if (partner) {
+      this.setState({
+        partner: partner
+      });
+    }
   }
 
   render() {
