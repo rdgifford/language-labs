@@ -8,6 +8,7 @@ import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
 import Waiting           from './Waiting';
+import Welcome           from './Welcome';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -136,6 +137,9 @@ class Dashboard extends React.Component {
           <div className='video-box'>
             {!this.state.callDone &&
               <div className='video-wrapper'>
+                {!this.state.callLoading && !this.state.currentCall &&
+                  <Welcome numMatches={this.props.onlineUsers.length}/>
+                }
                 {this.state.callLoading &&
                   <Waiting />
                 }
