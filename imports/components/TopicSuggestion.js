@@ -12,7 +12,6 @@ class TopicSuggestion extends React.Component {
   render () {
     return (
       <div className='topics'>
-        <h1>{`${this.props.partner.username} likes to talk about`}</h1>
         <ul className='topic-list'>
           {this.state.topics.map(t => <li>{t}</li>)}
         </ul>
