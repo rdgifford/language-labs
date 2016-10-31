@@ -42,7 +42,7 @@ class Review extends React.Component {
         <Stars 
           submit={()=> {
             this.handleSubmit.call(this)
-            this.props.clearPartner()
+            setTimeout(() => this.props.clearPartner(), 0)
           }}
         />
       </div>
