@@ -169,8 +169,17 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <div className='text-box'>
-            <Clock partner={this.state.partner} callDone={this.state.callDone} />
-            <TopicSuggestion />
+            { 
+              this.state.partner &&
+              <div>
+                <Clock partner={this.state.partner} callDone={this.state.callDone} />
+                <TopicSuggestion partner={this.state.partner}/>
+              </div>
+            }
+            {
+              !this.state.partner &&
+              <div>Waiting for match</div>
+            }
           </div>
           <div className='new-chat'>
             <div className='selected-language'>

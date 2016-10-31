@@ -4,23 +4,17 @@ class TopicSuggestion extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   topics: this.props.partner.profile.interests.split(',') || ''
-    // };
+    this.state = {
+      topics: this.props.partner.profile.interests.split(',') || ''
+    };
   }
-
-  // randomTopic() {
-  //   var randomIndex = Math.floor(Math.random() * this.state.topics.length);
-
-  //   this.setState({
-  //     currentTopic: randomIndex
-  //   });
-  // }
 
   render () {
     return (
-      <div className='suggestion'>
-
+      <div className='topics'>
+        <ul className='topic-list'>
+          {this.state.topics.map(t => <li>{t}</li>)}
+        </ul>
       </div>
     );
   };
