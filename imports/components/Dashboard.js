@@ -8,6 +8,7 @@ import VideoBox          from './VideoBox';
 import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
 
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -39,6 +40,12 @@ class Dashboard extends React.Component {
     if (this.state.localStream) {return;}
     let user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
+  }
+
+  componentDidUpdate() {
+    if (this.state.partner) {
+      document.getElementById("TimeLink").click();
+    }
   }
 
   declineCall() {
@@ -189,6 +196,22 @@ class Dashboard extends React.Component {
     this.setState({
       modalIsOpen: false,
     })
+
+  changeTab(evt) { //tabTitle
+    var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    document.getElementById(evt.currentTarget.text).style.display = "block";
+    evt.currentTarget.className += " active";
   }
 
   render() {
@@ -217,10 +240,22 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <div className='text-box'>
-            { 
+            {
               this.state.partner &&
-              <div className='clock-suggestion-wrapper'>
-                <TopicSuggestion partner={this.state.partner}/>
+              <div>
+                <ul className="tab">
+                  <li><a href="javascript:void(0)" id="TimeLink" className="tablinks" onClick={this.changeTab}>Time</a></li>
+                  <li><a href="javascript:void(0)" className="tablinks" onClick={this.changeTab}>Translate</a></li>
+                </ul>
+                <div id="Time" className="tabcontent">
+                  <div className="clock-suggestion-wrapper">
+                    <Clock partner={this.state.partner} callDone={this.state.callDone} />
+                    <TopicSuggestion partner={this.state.partner}/>
+                  </div>
+                </div>
+                  <div id="Translate" className="tabcontent">
+                  <iframe src="https://www.google.com"></iframe>
+                </div>
               </div>
             }
             {
