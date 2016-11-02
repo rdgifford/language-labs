@@ -53,8 +53,13 @@ class Dashboard extends React.Component {
   }
 
   receiveCall(incomingCall) {
-    var user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
+    let user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
+  }
+
+  declineCall() {
+    this.state.incomingCall.close();
+    this.setState({ gotCall: false, incomingCall: null, incomingCaller: null});
   }
 
   acceptCall() {
@@ -97,6 +102,7 @@ class Dashboard extends React.Component {
       dashboard.setState({ currentCall: outgoingCall, localStream: stream });
 
       outgoingCall.on('close', () => dashboard.endChat());
+
       outgoingCall.on('stream', function (theirStream) {
         dashboard.refs.myVideo.src = URL.createObjectURL(stream);
         dashboard.refs.theirVideo.src = URL.createObjectURL(theirStream);
@@ -105,6 +111,26 @@ class Dashboard extends React.Component {
       });
 
     }, err => console.log(err));
+
+    setTimeout( () => {
+      dashboard.state.partner || dashboard.endChat();
+    }, 12000);
+  }
+
+  endChat() {
+    this.state.currentCall.close();
+    this.state.localStream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+    this.toggleLoading(false);
+    this.setPartner(false);
+    this.refs.myVideo.src = null;
+    this.refs.theirVideo.src = null;
+    this.setState({ 
+      currentCall: false,
+      localStream: false,
+      callDone: true 
+    });
   }
 
   startRecording() {
@@ -137,26 +163,6 @@ class Dashboard extends React.Component {
     this.state.recorder.stop();
   }
 
-
-  endChat() {
-    // close peerjs connection
-    this.state.currentCall.close();
- 
-    // turn off camera and microphone
-    this.state.localStream.getTracks().forEach(function(track) {
-      track.stop();
-    });
-
-    // remove streams from html video elements
-    this.refs.myVideo.src = null;
-    this.refs.theirVideo.src = null;
-    
-    this.setState({ 
-      currentCall: false,
-      callDone: true 
-    });
-  }
-
   switchToggle() {
     this.setState({
       userListToggle: !this.state.userListToggle 
@@ -170,12 +176,14 @@ class Dashboard extends React.Component {
   }
 
   setPartner(id) {
-    var partner = Meteor.users.findOne({ 'profile.streamId': id });
-    if (partner) {
-      this.setState({
-        partner: partner
-      });
-    }
+    setTimeout( () => {
+      var partner = Meteor.users.findOne({ 'profile.streamId': id });
+      if (partner) {
+        this.setState({
+          partner: partner
+        });
+      }
+    }, 1000)
   }
 
   clearPartner () {
@@ -240,17 +248,16 @@ class Dashboard extends React.Component {
                 onRequestClose={this.closeModal}
                 style={customStyles} 
               >
-                <h2 ref="subtitle">User Profile</h2>
+                <h2 ref="subtitle">{this.state.showUser.username}</h2>
                 <a className='quitProfile' onClick={this.closeModal.bind(this)}>&#x2715;</a>
                 <div>
-                  <p>Username: {this.state.showUser.username}</p>
                   <p>Native Language: {this.state.showUser.profile.language}</p>
                   <p>Want to Learn: {this.state.showUser.profile.learning}</p>
                   <p>Interests: {this.state.showUser.profile.interests}</p>
                   <p>Location: {this.state.showUser.profile.location}</p>
-                  <button onClick={this.startChat.bind(this, this.state.showUser._id, this.props.peer)} >
+                  <p onClick={this.startChat.bind(this, this.state.showUser._id, this.props.peer)} >
                     Call {this.state.showUser.username}
-                  </button>
+                  </p>
                 </div>
               </Modal>
             </div>
@@ -271,19 +278,28 @@ class Dashboard extends React.Component {
             }
           </div>
           <div className='new-chat'>
-            <div className='selected-language'>
-              Selected Languages
-            </div>
-            <div className='language'>
-              {
-               `${this.props.user.profile.language} / 
-                ${this.props.user.profile.learning}`
-              }
-            </div>
+            {!this.state.gotCall &&
+              <div className='language'>
+                {
+                 `${this.props.user.profile.language} / 
+                  ${this.props.user.profile.learning}`
+                }
+              </div>
+            }
+            {this.state.gotCall &&
+              <div className='language'>
+                {this.state.incomingCaller.username} calling
+              </div>
+            }
             <div className='button-wrapper'>
               {this.state.gotCall &&
                 <button onClick={this.acceptCall.bind(this)}>
                   Accept
+                </button>
+              }
+              {this.state.gotCall &&
+                <button onClick={this.declineCall.bind(this)}>
+                  Decline
                 </button>
               }
               {!this.state.currentCall && !this.state.recording &&

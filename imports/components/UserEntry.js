@@ -6,7 +6,7 @@ const UserEntry = ({user, profilePopup}) => {
   }
 
   return(
-    <button className="userBtn" onClick={showProfile}>{user.username}</button>
+    <p className="userBtn" onClick={showProfile}>{user.username}</p>
   );
 };
 
