@@ -5,6 +5,16 @@ $blue: #5fa9d9;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
 
+// $break-small-top: 420px;
+// $break-small-bottom: 530px;
+// $break-small-left: 420px;
+// $break-small-right: 420px;
+
+$right-max-width: 360px;
+$right-min-width: 200px;
+
+$left-min-width: 580px;
+
 * {
     outline: none !important;
 }
@@ -45,24 +55,25 @@ body {
   background-color: rgba(0,0,0,.1);
 
   .top {
-    height: 60vh;
+    height: 65vh;
     display: flex;
     flex-direction: row;
-
-    
+    min-height: 270px;
   }
 
   .bottom {
-    height: 40vh;
+    height: 32vh;
     display: flex;
+    min-height: 170px;
 
     .text-box {
-      flex: 3;
+      flex: 1;
       margin: 10px;
       box-shadow: $shadow;
       border-radius: 4px;
       background-color: white;
       overflow: hidden;
+      min-width: $left-min-width;
 
       .waiting-for-match {
         width: 100%;
@@ -95,7 +106,7 @@ body {
 
           ul {
             margin-top: -20px;
-            flex: 3;
+            flex: 1;
             width: 80%;
             text-align: center;
             padding: 0px;
@@ -153,38 +164,6 @@ body {
         }
       }
     }
-
-  }
-  
-  ul.tab {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid #ccc;
-      background-color: #f1f1f1;
-  }
-
-  /* Float the list items side by side */
-  ul.tab li {float: left;}
-
-  /* Style the links inside the list items */
-  ul.tab li a {
-      display: inline-block;
-      color: black;
-      text-align: center;
-      padding: 1px 8px;
-      text-decoration: none;
-      transition: 0.3s;
-      font-size: 17px;
-  }
-
-  ul.tab li a:hover {background-color: #ddd;}
-
-  ul.tab li a:focus, .active {background-color: #ccc;}
-
-  .tabcontent {
-      display: none;
   }
 }
 
