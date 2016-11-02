@@ -12,8 +12,9 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
 
 $right-max-width: 360px;
 $right-min-width: 200px;
-
-$left-min-width: 580px;
+$left-min-width: 400px;
+$top-vh: 60vh;
+$bot-vh: 38vh;
 
 * {
     outline: none !important;
@@ -55,19 +56,19 @@ body {
   background-color: rgba(0,0,0,.1);
 
   .top {
-    height: 65vh;
+    height: $top-vh;
     display: flex;
     flex-direction: row;
     min-height: 270px;
   }
 
   .bottom {
-    height: 32vh;
+    height: $bot-vh;
     display: flex;
     min-height: 170px;
 
     .text-box {
-      flex: 1;
+      flex: 2;
       margin: 10px;
       box-shadow: $shadow;
       border-radius: 4px;
@@ -75,29 +76,130 @@ body {
       overflow: hidden;
       min-width: $left-min-width;
       
-      ul.tab {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          background-color: #f1f1f1;
+      .tab {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #f1f1f1;
+
+        li {
+          float: left;
+
+          a {
+            display: inline-block;
+            color: black;
+            text-align: center;
+            padding: 2px 4px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 17px;              
+          }
+
+          a:hover {
+            background-color: #ddd;
+          }
+
+          a:focus, .active {
+            background-color: #ccc;
+          }
+        }
       }
 
-      ul.tab li {float: left;}
+      #Translate {
+        #tw-container {
+          padding: 10px 20px 10px 20px;
 
-      ul.tab li a {
-          display: inline-block;
-          color: black;
-          text-align: center;
-          padding: 2px 4px;
-          text-decoration: none;
-          transition: 0.3s;
-          font-size: 17px;
+          #tw-ob {
+            display: flex;
+          }
+
+          #tw-source {
+            padding: 30px 0 50px;
+            flex: 1;
+            width: 0;
+
+            #tw-source-text-container {
+              padding-top: 20px;
+
+              textarea {
+                text-rendering: auto;
+                color: initial;
+                letter-spacing: normal;
+                word-spacing: normal;
+                text-transform: none;
+                text-indent: 0px;
+                text-shadow: none;
+                display: inline-block;
+              }
+
+              #tw-source-text-ta {
+                margin-bottom: 0px;
+                position: absolute;
+                top: 20px;
+                z-index: 2;
+              }
+            }
+          }
+
+          #tw-swapa {
+            padding: 0 20px;
+            position: relative;
+            flex-shrink: 0;
+            height: 100%;
+            color: #212121 !important;
+            width: 1px;
+          }
+          
+          #tw-target {
+            padding: 30px 0 50px;
+            flex: 1;
+            
+            #tw-target-text-container {
+              // padding-top: 20px;
+            }
+          }
+
+          #tw-source,
+          #tw-target {
+            // font-size: 0;
+            margin: 0;
+            position: relative;
+            text-align: left;
+            // padding-bottom: 69px;
+
+            .tw-ta-container {
+              
+            }
+            
+            .tw-data-placeholder { 
+                 color: #878787 !important;
+            }
+
+            .tw-text-large {
+              font-size: 12px !important;
+              line-height: 16px !important;
+              margin-bottom: -10px !important;
+            }
+
+            .tw-ta {
+              background-color: transparent;
+              border: none;
+              padding: 0;
+              padding-right: 0.14em;
+              position: relative;
+              margin: 0;
+              resize: none;
+              font-family: inherit;
+              overflow: hidden;
+              text-align: initial;
+              width: 100%;
+              white-space: pre-wrap;
+              word-wrap: break-word;
+            }
+          }
+        }
       }
-
-      ul.tab li a:hover {background-color: #ddd;}
-
-      ul.tab li a:focus, .active {background-color: #ccc;}
 
       .tabcontent {
           display: none;

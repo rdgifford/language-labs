@@ -42,9 +42,15 @@ class Dashboard extends React.Component {
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
   }
 
+  componentDidMount() {
+    if (!this.state.partner) {
+      document.getElementById('timelink').click();
+    }
+  }
+
   componentDidUpdate() {
-    if (this.state.partner) {
-      document.getElementById("TimeLink").click();
+    if (!this.state.partner) {
+      document.getElementById('timelink').click();
     }
   }
 
@@ -246,17 +252,42 @@ class Dashboard extends React.Component {
               !this.state.partner &&
               <div>
                 <ul className="tab">
-                  <li><a href="javascript:void(0)" id="TimeLink" className="tablinks" onClick={this.changeTab}>Time</a></li>
+
+                  <li><a href="javascript:void(0)" id="timelink" className="tablinks" onClick={this.changeTab}>Time</a></li>
+                  <li><a href="javascript:void(0)" className="tablinks" onClick={this.changeTab}>Chat</a></li>                  
                   <li><a href="javascript:void(0)" className="tablinks" onClick={this.changeTab}>Translate</a></li>
                 </ul>
                 <div id="Time" className="tabcontent">
                   <div className="clock-suggestion-wrapper">
+                    <h1>Hello</h1>
                   </div>
                 </div>
-                  <div id="Translate" className="tabcontent">
-                  <iframe src="https://www.google.com"></iframe>
+                <div id="Chat" className="tabcontent">
+                  <h1>2</h1>
+                </div>                
+                <div id="Translate" className="tabcontent">
+                  <div id="tw-container">
+                    <div id="tw-ob">
+                      <div id="tw-source">
+                        <div className="tw-ta-container" id="tw-source-text-container">
+                          <textarea className="tw-data-placeholder tw-ta tw-text-large" id="tw-source-text-ta" cols="20" rows="8" placeholder="Enter text">
+                          </textarea>
+                        </div>
+                      </div>
+                      <div id="tw-target">
+                        <div className="tw-ta-container" id="tw-target-text-container">
+                          <span className="tw-ta tw-text-large" id="tw-target-text-ta" cols="20" rows="8">Translate</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+                          // <pre className="tw-data-placeholder tw-ta tw-text-large" data-placeholder="Enter text" id="tw-source-text" style="text-align: left; height: 20px;">
+                          //   <span lang="en">Enter text</span>
+                          // </pre>
+                  // <div className="tw-swapa">
+                  // </div>
             }
             {
               this.state.partner &&
