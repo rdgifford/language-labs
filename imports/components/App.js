@@ -31,10 +31,11 @@ const App = ({
 
       return (
         <Dashboard 
-          onlineUsers={onlineUsers.filter(u => (
-            u.profile.language.toLowerCase() === user.profile.learning.toLowerCase() 
-            && u.profile.learning.toLowerCase() === user.profile.language.toLowerCase()
-          ))}
+          // onlineUsers={onlineUsers.filter(u => (
+          //   u.profile.language.toLowerCase() === user.profile.learning.toLowerCase() 
+          //   && u.profile.learning.toLowerCase() === user.profile.language.toLowerCase()
+          // ))}
+          onlineUsers={onlineUsers}
           language={user.profile.language}
           peer={peer}
           user={user}
