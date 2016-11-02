@@ -45,9 +45,6 @@ class Dashboard extends React.Component {
       userListToggle: false,
     };
 
-    this.startChat.bind(this);
-    this.endChat.bind(this);
-
     props.peer.on('call', this.receiveCall.bind(this));
 
     Meteor.users.update({_id: Meteor.userId()}, {
@@ -57,40 +54,54 @@ class Dashboard extends React.Component {
 
   receiveCall(incomingCall) {
     var user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
-
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
   }
 
   acceptCall() {
-    this.setState({ gotCall: false });
-
     let dashboard = this;
     let incomingCall = this.state.incomingCall;
-    let myVideo = this.refs.myVideo;
-    let theirVideo = this.refs.theirVideo;
-
     dashboard.toggleLoading(true);
 
     navigator.getUserMedia({ audio: true, video: true }, stream => {
-      
-      dashboard.setState({ localStream: stream, currentCall: incomingCall });   
-
       Meteor.users.update({_id: Meteor.userId()}, {
         $set: { 'profile.streamId': stream.id }
       });
 
-      incomingCall.answer(stream);
-      incomingCall.on('stream', function (theirStream) {
-        
-        myVideo.src = URL.createObjectURL(stream);
-        theirVideo.src = URL.createObjectURL(theirStream);
+      dashboard.setState({ localStream: stream, currentCall: incomingCall, gotCall: false });   
 
+      incomingCall.answer(stream);
+      incomingCall.on('close', () => dashboard.endChat());
+      incomingCall.on('stream', function (theirStream) {
+        dashboard.refs.myVideo.src = URL.createObjectURL(stream);
+        dashboard.refs.theirVideo.src = URL.createObjectURL(theirStream);
         dashboard.setPartner(theirStream.id);
         dashboard.toggleLoading(false);
       });
 
-      dashboard.state.currentCall.on('close', function() {
-        dashboard.endChat();
+    }, err => console.log(err));
+  }
+
+  startChat(userId, peer) {
+    let dashboard = this;
+    dashboard.closeModal();
+    dashboard.toggleLoading(true);
+    
+    navigator.getUserMedia({ audio: true, video: true }, function (stream) {
+      Meteor.users.update({_id: Meteor.userId()}, {
+        $set: { 'profile.streamId': stream.id }
+      });
+
+      let user = Meteor.users.findOne({ _id: userId});
+      let outgoingCall = peer.call(user.profile.peerId, stream);
+
+      dashboard.setState({ currentCall: outgoingCall, localStream: stream });
+
+      outgoingCall.on('close', () => dashboard.endChat());
+      outgoingCall.on('stream', function (theirStream) {
+        dashboard.refs.myVideo.src = URL.createObjectURL(stream);
+        dashboard.refs.theirVideo.src = URL.createObjectURL(theirStream);
+        dashboard.setPartner(theirStream.id);
+        dashboard.toggleLoading(false);
       });
 
     }, err => console.log(err));
@@ -126,41 +137,6 @@ class Dashboard extends React.Component {
     this.state.recorder.stop();
   }
 
-  startChat(userId, peer) {
-
-    let dashboard = this;
-    let myVideo = this.refs.myVideo;
-    let theirVideo = this.refs.theirVideo;
-    
-    navigator.getUserMedia({ audio: true, video: true }, function (stream) {
-
-      dashboard.setState({ localStream: stream });
-      dashboard.toggleLoading(true);
-      myVideo.src = URL.createObjectURL(stream);
-      Meteor.users.update({_id: Meteor.userId()}, {
-        $set: {
-          'profile.streamId': stream.id
-        }
-      });
-
-      var user = Meteor.users.findOne({ _id: userId});
-
-      if (!dashboard.state.currentCall) {
-        let outgoingCall = peer.call(user.profile.peerId, stream);
-        dashboard.setState({ currentCall: outgoingCall });
-        outgoingCall.on('stream', function (theirStream) {
-          dashboard.toggleLoading(false);
-          theirVideo.src = URL.createObjectURL(theirStream);
-          dashboard.setPartner(theirStream.id);
-        });
-      }
-
-      dashboard.state.currentCall.on('close', function() {
-        dashboard.endChat();
-      });
-
-    }, err => console.log(err));
-  }
 
   endChat() {
     // close peerjs connection
