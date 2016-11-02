@@ -8,7 +8,7 @@ export default class Toggle extends React.Component {
   render() {
     return (
       <label className="switch">
-        <input type="checkbox" />
+        <input onChange={this.props.switch} type="checkbox" />
         <div className="slider round"></div>
       </label>
     );

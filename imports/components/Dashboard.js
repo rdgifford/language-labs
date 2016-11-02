@@ -38,9 +38,10 @@ class Dashboard extends React.Component {
       gotCall: false,
       incomingCall: false,
       modalIsOpen: false,
-      showUser: this.props.user
+      showUser: this.props.user,
       recorder: false,
       recording: false,
+      userListToggle: false,
     };
 
     this.startChat.bind(this);
@@ -178,6 +179,12 @@ class Dashboard extends React.Component {
     });
   }
 
+  switchToggle() {
+    this.setState({
+      userListToggle: !this.state.userListToggle 
+    });
+  }
+  
   toggleLoading(loading) {
     this.setState({
       callLoading: loading
@@ -242,11 +249,12 @@ class Dashboard extends React.Component {
           </div>
           <div className='profile'>
             <div className='userbar'>
-              <Toggle />
+              <Toggle switch={this.switchToggle.bind(this)}/>
               <AccountsUIWrapper className='userInfo' />
             </div>
-            <UserList users={this.props.onlineUsers} profilePopup={this.openModal.bind(this)} />
-            {//<UserProfile user={this.props.user}/>
+            {
+              this.state.userListToggle ? <UserProfile user={this.props.user}/> :
+               <UserList users={this.props.onlineUsers} profilePopup={this.openModal.bind(this)} />
             }
             <div onClick={this.closeModal.bind(this)}>
               <Modal
