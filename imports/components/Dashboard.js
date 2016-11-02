@@ -96,7 +96,6 @@ class Dashboard extends React.Component {
     }, err => console.log(err));
   }
 
-<<<<<<< 1c3ed75a1faf453af1f85a88591211493b4e730d
   startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true, video: true})
       .then((videoStream) => {
@@ -127,10 +126,7 @@ class Dashboard extends React.Component {
     this.state.recorder.stop();
   }
 
-  startChat(users, peer) {
-=======
   startChat(userId, peer) {
->>>>>>> (feat) allow user to pick who to call
 
     let dashboard = this;
     let myVideo = this.refs.myVideo;
