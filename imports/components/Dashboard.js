@@ -56,7 +56,8 @@ class Dashboard extends React.Component {
 
   receiveCall(incomingCall) {
     var user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
-    this.setState({ gotCall: true, incomingCall: incomingCall});
+
+    this.setState({ gotCall: true, incomingCall: incomingCall, partner: user});
   }
 
   acceptCall() {
@@ -301,14 +302,8 @@ class Dashboard extends React.Component {
             </div>
             <div className='button-wrapper'>
               {this.state.gotCall &&
-                <button onClick={this.acceptCall.bind(this)}>Accept</button>
-              }
-              {!this.props.gotCall && !this.props.onlineUsers[0] &&
-                <button>Waiting</button>
-              }
-              {!this.props.gotCall && this.props.onlineUsers[0] && !this.state.currentCall &&
-                <button onClick={this.startChat.bind(this, this.props.onlineUsers, this.props.peer)}>
-                  Start Chat
+                <button onClick={this.acceptCall.bind(this)}>
+                  Accept
                 </button>
               }
               {!this.state.currentCall && !this.state.recording &&
@@ -316,7 +311,7 @@ class Dashboard extends React.Component {
                   Record
                 </button>
               }
-              {this.state.currentCall &&
+              {!this.state.gotCall && this.state.currentCall &&
                 <button onClick={this.endChat.bind(this)}>
                   End Chat
                 </button>
