@@ -28,7 +28,6 @@ const App = ({
         <SelectLanguage id={Meteor.userId()} /> 
       );
     } else {
-
       return (
         <Dashboard 
           // onlineUsers={onlineUsers.filter(u => (
@@ -42,7 +41,9 @@ const App = ({
         />
       );
     }
-  } else { return <HomePage /> }
+  } else {
+    return <HomePage /> 
+  }
 }
 
 export default App;
