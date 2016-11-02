@@ -1,11 +1,14 @@
 import React from 'react';
+import UserEntry from './UserEntry';
 
-const UserList = ({users}) => (
+const UserList = ({users, profilePopup}) => (
   <div className='user-profile'>
     {users.map((user, i) => (
-    	<button key={i}>{user.username}</button>
+    	<UserEntry user={user} key={i} profilePopup={profilePopup} />
     ))}
   </div>
 );
+
+
 
 export default UserList;

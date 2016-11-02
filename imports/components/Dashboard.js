@@ -16,7 +16,7 @@ const customStyles = {
   content : {
     top                   : '50%',
     left                  : '50%',
-    right                 : 'auto',
+    right                 : '20%',
     bottom                : 'auto',
     transform             : 'translate(-50%, -50%)',
     background            : '#5fa9d9',
@@ -36,7 +36,8 @@ class Dashboard extends React.Component {
       partner: false,
       gotCall: false,
       incomingCall: false,
-      modalIsOpen: false
+      modalIsOpen: false,
+      showUser: this.props.user
     };
 
     this.startChat.bind(this);
@@ -166,15 +167,16 @@ class Dashboard extends React.Component {
     });
   }
 
-  openModal() {
+  openModal(user) {
     this.setState({
-      modalIsOpen: true
+      modalIsOpen: true,
+      showUser: user
     })
   }
 
   closeModal() {
     this.setState({
-      modalIsOpen: false
+      modalIsOpen: false,
     })
   }
 
@@ -209,26 +211,26 @@ class Dashboard extends React.Component {
             <div className='sign-out'>
               <AccountsUIWrapper />
             </div>
-            <UserList users={this.props.onlineUsers} />
+            <UserList users={this.props.onlineUsers} profilePopup={this.openModal.bind(this)} />
             {//<UserProfile user={this.props.user}/>
             }
-            <div>
-              <button onClick={this.openModal}>Open Modal</button>
+            <div onClick={this.closeModal.bind(this)}>
               <Modal
                 isOpen={this.state.modalIsOpen}
-                // onAfterOpen={this.afterOpenModal}
                 onRequestClose={this.closeModal}
                 style={customStyles} 
-                >
-            
-                <h2 ref="subtitle">Hello</h2>
-                <button onClick={this.closeModal.bind(this)}>close</button>
-                <div>I am a modal</div>
-                <div>{JSON.stringify(this.props.user)}</div>
+              >
+                <h2 ref="subtitle">User Profile</h2>
+                <a className='quitProfile' onClick={this.closeModal.bind(this)}>&#x2715;</a>
+                <div>
+                  <p>Username: {this.state.showUser.username}</p>
+                  <p>Native Language: {this.state.showUser.profile.language}</p>
+                  <p>Want to Learn: {this.state.showUser.profile.learning}</p>
+                  <p>Interests: {this.state.showUser.profile.interests}</p>
+                  <p>Location: {this.state.showUser.profile.location}</p>
+                </div>
               </Modal>
             </div>
-            }
-            <UserProfile user={this.props.user}/>
           </div>
         </div>
         <div className='bottom'>
@@ -261,8 +263,6 @@ class Dashboard extends React.Component {
               }
               {!this.props.gotCall && !this.props.onlineUsers[0] &&
                 <button>Waiting</button>
-              {!this.props.onlineUsers[0] &&
-                <button onClick={this.openModal.bind(this)}>Waiting</button>
               }
               {!this.props.gotCall && this.props.onlineUsers[0] && !this.state.currentCall &&
                 <button onClick={this.startChat.bind(this, this.props.onlineUsers, this.props.peer)}>
