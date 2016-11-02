@@ -6,7 +6,7 @@ const Welcome = ({numMatches}) => {
   return (
     <div className='welcome'>
       <div className='welcome-title'>
-        Welcome to Language Labs
+        Welcome to Language.next
       </div>
       <div className='welcome-matches'>
         {`You have ${numMatches} ${match_matches} waiting to chat`}

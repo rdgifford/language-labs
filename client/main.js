@@ -34,17 +34,13 @@ const AppContainer = createContainer(() => {
   
   const onlineUsers  = Meteor.users.find({ 
     $and: [ 
-      { _id: { $in: userIds, $ne: Meteor.userId() } }, 
-      { 'profile.language': { $exists: true } } 
+      // { 'profile.language': { $exists: true } },  
+      { _id: { $in: userIds, $ne: Meteor.userId() } }
     ] 
   }).fetch();
 
-  return {
-    onlineUsers,
-    user,
-    loading,
-    peer
-  };
+  return { onlineUsers, user, loading, peer };
+
 }, App);
 
 

@@ -9,6 +9,8 @@ import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
 import Waiting           from './Waiting';
 import Welcome           from './Welcome';
+import UserList          from './UserList';
+
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -19,77 +21,95 @@ class Dashboard extends React.Component {
       currentCall: false,
       callDone: false,
       callLoading: false,
-      partner: false
+      partner: false,
+      gotCall: false,
+      incomingCall: false
     };
 
     this.startChat.bind(this);
     this.endChat.bind(this);
+
+    props.peer.on('call', this.receiveCall.bind(this));
+
+    Meteor.users.update({_id: Meteor.userId()}, {
+      $set: { 'profile.peerId': props.peer.id }
+    });
+  }
+
+  receiveCall(incomingCall) {
+    var user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
+    this.setState({ gotCall: true, incomingCall: incomingCall});
+  }
+
+  acceptCall() {
+    this.setState({ gotCall: false });
+
+    let dashboard = this;
+    let incomingCall = this.state.incomingCall;
+    let myVideo = this.refs.myVideo;
+    let theirVideo = this.refs.theirVideo;
+
+    dashboard.toggleLoading(true);
+
+    navigator.getUserMedia({ audio: true, video: true }, stream => {
+      
+      dashboard.setState({ localStream: stream, currentCall: incomingCall });   
+
+      Meteor.users.update({_id: Meteor.userId()}, {
+        $set: { 'profile.streamId': stream.id }
+      });
+
+      incomingCall.answer(stream);
+      incomingCall.on('stream', function (theirStream) {
+        
+        myVideo.src = URL.createObjectURL(stream);
+        theirVideo.src = URL.createObjectURL(theirStream);
+
+        dashboard.setPartner(theirStream.id);
+        dashboard.toggleLoading(false);
+      });
+
+      dashboard.state.currentCall.on('close', function() {
+        dashboard.endChat();
+      });
+
+    }, err => console.log(err));
   }
 
   startChat(users, peer) {
-    // save context
-    var dashboard = this;
 
-    // get html video elements
-    var myVideo = this.refs.myVideo;
-    var theirVideo = this.refs.theirVideo;
+    let dashboard = this;
+    let myVideo = this.refs.myVideo;
+    let theirVideo = this.refs.theirVideo;
     
-    // get audio/video permissions
     navigator.getUserMedia({ audio: true, video: true }, function (stream) {
-      // save your users own feed to state
+
       dashboard.setState({ localStream: stream });
-
-      // show loading screen
       dashboard.toggleLoading(true);
-
-      // show own videostream of user
       myVideo.src = URL.createObjectURL(stream);
-
-      // give the current user a peerId and save their streamId
       Meteor.users.update({_id: Meteor.userId()}, {
         $set: {
-          'profile.peerId': peer.id,
           'profile.streamId': stream.id
         }
       });
 
-      // find other person to call
-      var user = users[0];
+      let user = users[0]; 
 
-      // setTimeout needed to ensure partner can be found
-      setTimeout(function() {
-        // receive a call from other person
-        if (!dashboard.state.currentCall) {
-          peer.on('call', function (incomingCall) {
-            dashboard.setState({ currentCall: incomingCall });
-            incomingCall.answer(stream);
-            incomingCall.on('stream', function (theirStream) {
-              dashboard.toggleLoading(false);
-              theirVideo.src = URL.createObjectURL(theirStream);
-              dashboard.setPartner(theirStream.id);
-            });
-          });
-        }
-
-        // if call not received first, call other person
-        if (!dashboard.state.currentCall) {
-          var outgoingCall = peer.call(user.profile.peerId, stream);
-          dashboard.setState({ currentCall: outgoingCall });
-          outgoingCall.on('stream', function (theirStream) {
-            dashboard.toggleLoading(false);
-            theirVideo.src = URL.createObjectURL(theirStream);
-            dashboard.setPartner(theirStream.id);
-          });
-        }
-
-        // if other person ends chat, end chat too
-        dashboard.state.currentCall.on('close', function() {
-          dashboard.endChat();
+      if (!dashboard.state.currentCall) {
+        let outgoingCall = peer.call(user.profile.peerId, stream);
+        dashboard.setState({ currentCall: outgoingCall });
+        outgoingCall.on('stream', function (theirStream) {
+          dashboard.toggleLoading(false);
+          theirVideo.src = URL.createObjectURL(theirStream);
+          dashboard.setPartner(theirStream.id);
         });
-      }, 200);
-    }, function (error) { 
-      console.log(error); 
-    });
+      }
+
+      dashboard.state.currentCall.on('close', function() {
+        dashboard.endChat();
+      });
+
+    }, err => console.log(err));
   }
 
   endChat() {
@@ -164,7 +184,9 @@ class Dashboard extends React.Component {
             <div className='sign-out'>
               <AccountsUIWrapper />
             </div>
-            <UserProfile user={this.props.user}/>
+            <UserList users={this.props.onlineUsers} />
+            {//<UserProfile user={this.props.user}/>
+            }
           </div>
         </div>
         <div className='bottom'>
@@ -192,15 +214,18 @@ class Dashboard extends React.Component {
               }
             </div>
             <div className='button-wrapper'>
-              {!this.props.onlineUsers[0] &&
+              {this.state.gotCall &&
+                <button onClick={this.acceptCall.bind(this)}>Accept</button>
+              }
+              {!this.props.gotCall && !this.props.onlineUsers[0] &&
                 <button>Waiting</button>
               }
-              {this.props.onlineUsers[0] && !this.state.currentCall &&
+              {!this.props.gotCall && this.props.onlineUsers[0] && !this.state.currentCall &&
                 <button onClick={this.startChat.bind(this, this.props.onlineUsers, this.props.peer)}>
                   Start Chat
                 </button>
               }
-              {this.state.currentCall &&
+              {!this.props.gotCall && this.state.currentCall &&
                 <button onClick={this.endChat.bind(this)}>
                   End Chat
                 </button>
