@@ -37,6 +37,7 @@ class Dashboard extends React.Component {
       partner: false,
       gotCall: false,
       incomingCall: false,
+      incomingCaller: false,
       modalIsOpen: false,
       showUser: this.props.user,
       recorder: false,
@@ -57,7 +58,7 @@ class Dashboard extends React.Component {
   receiveCall(incomingCall) {
     var user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
 
-    this.setState({ gotCall: true, incomingCall: incomingCall, partner: user});
+    this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
   }
 
   acceptCall() {
@@ -95,6 +96,7 @@ class Dashboard extends React.Component {
     }, err => console.log(err));
   }
 
+<<<<<<< 1c3ed75a1faf453af1f85a88591211493b4e730d
   startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true, video: true})
       .then((videoStream) => {
@@ -126,6 +128,9 @@ class Dashboard extends React.Component {
   }
 
   startChat(users, peer) {
+=======
+  startChat(userId, peer) {
+>>>>>>> (feat) allow user to pick who to call
 
     let dashboard = this;
     let myVideo = this.refs.myVideo;
@@ -142,7 +147,7 @@ class Dashboard extends React.Component {
         }
       });
 
-      let user = users[0]; 
+      var user = Meteor.users.findOne({ _id: userId});
 
       if (!dashboard.state.currentCall) {
         let outgoingCall = peer.call(user.profile.peerId, stream);
@@ -271,6 +276,9 @@ class Dashboard extends React.Component {
                   <p>Want to Learn: {this.state.showUser.profile.learning}</p>
                   <p>Interests: {this.state.showUser.profile.interests}</p>
                   <p>Location: {this.state.showUser.profile.location}</p>
+                  <button onClick={this.startChat.bind(this, this.state.showUser._id, this.props.peer)} >
+                    Call {this.state.showUser.username}
+                  </button>
                 </div>
               </Modal>
             </div>
