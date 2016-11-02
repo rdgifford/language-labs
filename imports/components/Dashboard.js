@@ -241,7 +241,9 @@ class Dashboard extends React.Component {
         <div className='bottom'>
           <div className='text-box'>
             {
-              this.state.partner &&
+                    // <Clock partner={this.state.partner} callDone={this.state.callDone} />
+                    // <TopicSuggestion partner={this.state.partner}/>
+              !this.state.partner &&
               <div>
                 <ul className="tab">
                   <li><a href="javascript:void(0)" id="TimeLink" className="tablinks" onClick={this.changeTab}>Time</a></li>
@@ -249,8 +251,6 @@ class Dashboard extends React.Component {
                 </ul>
                 <div id="Time" className="tabcontent">
                   <div className="clock-suggestion-wrapper">
-                    <Clock partner={this.state.partner} callDone={this.state.callDone} />
-                    <TopicSuggestion partner={this.state.partner}/>
                   </div>
                 </div>
                   <div id="Translate" className="tabcontent">
@@ -259,7 +259,7 @@ class Dashboard extends React.Component {
               </div>
             }
             {
-              !this.state.partner &&
+              this.state.partner &&
               <div className='waiting-for-match'>Waiting for match...</div>
             }
           </div>

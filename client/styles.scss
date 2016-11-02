@@ -74,6 +74,35 @@ body {
       background-color: white;
       overflow: hidden;
       min-width: $left-min-width;
+      
+      ul.tab {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #f1f1f1;
+      }
+
+      ul.tab li {float: left;}
+
+      ul.tab li a {
+          display: inline-block;
+          color: black;
+          text-align: center;
+          padding: 2px 4px;
+          text-decoration: none;
+          transition: 0.3s;
+          font-size: 17px;
+      }
+
+      ul.tab li a:hover {background-color: #ddd;}
+
+      ul.tab li a:focus, .active {background-color: #ccc;}
+
+      .tabcontent {
+          display: none;
+          border-top: none;
+      }
 
       .waiting-for-match {
         width: 100%;
@@ -84,7 +113,6 @@ body {
         font-size: 24px;
         color: $blue;
       }
-
 
       .clock-suggestion-wrapper {
         width: 100%;
@@ -159,12 +187,15 @@ body {
           }
 
           h3 {
+
             font-weight: 700;
           }
         }
       }
     }
   }
+
+
 }
 
 
