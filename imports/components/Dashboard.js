@@ -10,7 +10,19 @@ import Review            from './Review';
 import Waiting           from './Waiting';
 import Welcome           from './Welcome';
 import UserList          from './UserList';
+import Modal             from 'react-modal';
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    transform             : 'translate(-50%, -50%)',
+    background            : '#5fa9d9',
+    color                 : '#fff',
+  }
+};
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -23,7 +35,8 @@ class Dashboard extends React.Component {
       callLoading: false,
       partner: false,
       gotCall: false,
-      incomingCall: false
+      incomingCall: false,
+      modalIsOpen: false
     };
 
     this.startChat.bind(this);
@@ -153,6 +166,18 @@ class Dashboard extends React.Component {
     });
   }
 
+  openModal() {
+    this.setState({
+      modalIsOpen: true
+    })
+  }
+
+  closeModal() {
+    this.setState({
+      modalIsOpen: false
+    })
+  }
+
   render() {
     return (
       <div className='dashboard'>
@@ -187,6 +212,23 @@ class Dashboard extends React.Component {
             <UserList users={this.props.onlineUsers} />
             {//<UserProfile user={this.props.user}/>
             }
+            <div>
+              <button onClick={this.openModal}>Open Modal</button>
+              <Modal
+                isOpen={this.state.modalIsOpen}
+                // onAfterOpen={this.afterOpenModal}
+                onRequestClose={this.closeModal}
+                style={customStyles} 
+                >
+            
+                <h2 ref="subtitle">Hello</h2>
+                <button onClick={this.closeModal.bind(this)}>close</button>
+                <div>I am a modal</div>
+                <div>{JSON.stringify(this.props.user)}</div>
+              </Modal>
+            </div>
+            }
+            <UserProfile user={this.props.user}/>
           </div>
         </div>
         <div className='bottom'>
@@ -219,6 +261,8 @@ class Dashboard extends React.Component {
               }
               {!this.props.gotCall && !this.props.onlineUsers[0] &&
                 <button>Waiting</button>
+              {!this.props.onlineUsers[0] &&
+                <button onClick={this.openModal.bind(this)}>Waiting</button>
               }
               {!this.props.gotCall && this.props.onlineUsers[0] && !this.state.currentCall &&
                 <button onClick={this.startChat.bind(this, this.props.onlineUsers, this.props.peer)}>
