@@ -39,6 +39,8 @@ class Dashboard extends React.Component {
       incomingCall: false,
       modalIsOpen: false,
       showUser: this.props.user
+      recorder: false,
+      recording: false,
     };
 
     this.startChat.bind(this);
@@ -89,6 +91,36 @@ class Dashboard extends React.Component {
       });
 
     }, err => console.log(err));
+  }
+
+  startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true})
+      .then((videoStream) => {
+        recorder = new MediaRecorder(videoStream);
+        console.log('recording', recorder.state);
+        this.setState({
+          recorder: recorder,
+          recording: true,
+        })
+        console.log(!this.state.currentCall, this.state.recording);
+        recorder.start();
+
+        recorder.ondataavailable = (e) => {
+          console.log(e.data);
+        }
+
+        recorder.onstop = (e) => {
+          console.log('onstop event', e);
+          this.setState({
+            recording: false,
+          });
+          recorder.stream.getTracks().forEach(track => {track.stop()});
+        }
+      })
+  }
+
+  stopRecording() {
+    this.state.recorder.stop();
   }
 
   startChat(users, peer) {
@@ -271,9 +303,19 @@ class Dashboard extends React.Component {
                   Start Chat
                 </button>
               }
-              {!this.props.gotCall && this.state.currentCall &&
+              {!this.state.currentCall && !this.state.recording &&
+                <button onClick={this.startRecording.bind(this)}>
+                  Record
+                </button>
+              }
+              {this.state.currentCall &&
                 <button onClick={this.endChat.bind(this)}>
                   End Chat
+                </button>
+              }
+              {!this.state.currentCall && this.state.recording &&
+                <button onClick={this.stopRecording.bind(this)}>
+                  Stop Recording
                 </button>
               }
             </div>
