@@ -11,6 +11,7 @@ import Waiting           from './Waiting';
 import Welcome           from './Welcome';
 import UserList          from './UserList';
 import Modal             from 'react-modal';
+import Toggle            from './Toggle';
 
 const customStyles = {
   content : {
@@ -208,8 +209,9 @@ class Dashboard extends React.Component {
             }
           </div>
           <div className='profile'>
-            <div className='sign-out'>
-              <AccountsUIWrapper />
+            <div className='userbar'>
+              <Toggle />
+              <AccountsUIWrapper className='userInfo' />
             </div>
             <UserList users={this.props.onlineUsers} profilePopup={this.openModal.bind(this)} />
             {//<UserProfile user={this.props.user}/>

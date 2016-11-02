@@ -37,26 +37,6 @@ body {
   display: none;
 }
 
-.home-page {
-  height: 100vh;
-  width: 100vw;
-  background: url('/pattern.svg') center center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .sign-in {
-    position: absolute;
-    right: 240px;
-    top: 40px;
-  }
-
-  .main-logo {
-    font-size: 90px;
-    color: white;
-  }
-}
-
 .language-select {
   width: 100vw;
   height: 100vh;
@@ -296,6 +276,7 @@ body {
     }
 
     .profile {
+      position: relative;
       flex: 1;
       margin: 10px;
       border-radius: 4px;
@@ -304,14 +285,74 @@ body {
       box-shadow: $shadow;
       background-color: white;
 
-      .sign-out {
-        flex: 1;
+      .userbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         height: 40px;
-        text-align: right;
-        padding-right: 20px;
-        padding-top: 20px;
+        padding: 10px;
         background-color: $blue;
         color: white;
+      
+          /* The switch - the box around the slider */
+          .switch {
+            display: flex;
+            position: relative;
+            width: 60px;
+            height: 34px;
+          }
+
+          /* Hide default HTML checkbox */
+          .switch input {display:none;}
+
+          /* The slider */
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
+
+          .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
+
+          input:checked + .slider {
+            background-color: #A3C8E7;
+          }
+
+          input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+          }
+
+          input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+          }
+
+          /* Rounded sliders */
+          .slider.round {
+            border-radius: 34px;
+          }
+
+          .slider.round:before {
+            border-radius: 50%;
+          }   
 
         #login-name-link {
           text-decoration: none;
