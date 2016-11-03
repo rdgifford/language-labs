@@ -1,29 +1,12 @@
 import React             from 'react';
 import { Meteor }        from 'meteor/meteor';
-import AccountsUIWrapper from './accounts';
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile';
-import Clock             from './Clock';
 import TopicSuggestion   from './TopicSuggestion';
-import Review            from './Review';
-import Waiting           from './Waiting';
-import Welcome           from './Welcome';
-import UserList          from './UserList';
-import Modal             from 'react-modal';
-import Toggle            from './Toggle';
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : '20%',
-    bottom                : 'auto',
-    transform             : 'translate(-50%, -50%)',
-    background            : '#5fa9d9',
-    color                 : '#fff',
-  }
-};
+import VideoBox          from './VideoBox';
+import ButtonBox         from './ButtonBox';
+import ProfileBox        from './ProfileBox';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -107,20 +90,20 @@ class Dashboard extends React.Component {
   }
 
   connectStream(theirStream) {
-    this.refs.myVideo.src = URL.createObjectURL(this.state.localStream);
-    this.refs.theirVideo.src = URL.createObjectURL(theirStream);
+    document.getElementById('myVideo').src = URL.createObjectURL(this.state.localStream);
+    document.getElementById('theirVideo').src = URL.createObjectURL(theirStream);
     this.setPartner(theirStream.id);
     this.toggleLoading(false);
   }
 
   endChat() {
+    document.getElementById('myVideo').src = null;
+    document.getElementById('theirVideo').src = null;
     this.state.currentCall.close();
     this.state.localStream.getTracks().forEach(function(track) {
       track.stop();
     });
     this.toggleLoading(false);
-    this.refs.myVideo.src = null;
-    this.refs.theirVideo.src = null;
     this.setState({ 
       localStream: false,
       currentCall: false,
@@ -212,58 +195,25 @@ class Dashboard extends React.Component {
     return (
       <div className='dashboard'>
         <div className='top'>
-          <div className='video-box'>
-            {!this.state.callDone &&
-              <div className='video-wrapper'>
-                {!this.state.callLoading && !this.state.currentCall &&
-                  <Welcome numMatches={this.props.onlineUsers.length}/>
-                }
-                {this.state.callLoading &&
-                  <Waiting />
-                }
-                <video ref='myVideo' id='myVideo' muted='true' autoPlay='true' 
-                  className={this.state.callLoading ? 'hidden' : null}></video>
-                <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'
-                  className={this.state.callLoading ? 'hidden' : null}></video>
-              </div>
-            }
-
-            {!this.state.currentCall && this.state.callDone &&
-              <Review 
-                partner={this.state.partner}
-                clearPartner={this.clearPartner.bind(this)}
-              />
-            }
-          </div>
-          <div className='profile'>
-            <div className='userbar'>
-              <Toggle switch={this.switchToggle.bind(this)}/>
-              <AccountsUIWrapper className='userInfo' />
-            </div>
-            {
-              this.state.userListToggle ? <UserProfile user={this.props.user}/> :
-               <UserList users={this.props.onlineUsers} profilePopup={this.openModal.bind(this)} />
-            }
-            <div onClick={this.closeModal.bind(this)}>
-              <Modal
-                isOpen={this.state.modalIsOpen}
-                onRequestClose={this.closeModal}
-                style={customStyles} 
-              >
-                <h2 ref="subtitle">{this.state.showUser.username}</h2>
-                <a className='quitProfile' onClick={this.closeModal.bind(this)}>&#x2715;</a>
-                <div>
-                  <p>Native Language: {this.state.showUser.profile.language}</p>
-                  <p>Want to Learn: {this.state.showUser.profile.learning}</p>
-                  <p>Interests: {this.state.showUser.profile.interests}</p>
-                  <p>Location: {this.state.showUser.profile.location}</p>
-                  <p onClick={this.startChat.bind(this, this.state.showUser._id, this.props.peer)} >
-                    Call {this.state.showUser.username}
-                  </p>
-                </div>
-              </Modal>
-            </div>
-          </div>
+          <VideoBox 
+            callDone={this.state.callDone}
+            callLoading={this.state.callLoading}
+            currentCall={this.state.currentCall}
+            onlineUsers={this.props.onlineUsers}
+            partner={this.state.partner}
+            clearPartner={this.clearPartner.bind(this)}
+          />
+          <ProfileBox
+            switchToggle={this.switchToggle.bind(this)}
+            userListToggle={this.state.userListToggle}
+            user={this.props.user}
+            onlineUsers={this.props.onlineUsers}
+            modalIsOpen={this.state.modalIsOpen}
+            openModal={this.openModal.bind(this)}
+            closeModal={this.closeModal.bind(this)}
+            showUser={this.state.showUser}
+            startChat={this.startChat.bind(this, this.state.showUser._id, this.props.peer)}
+          />
         </div>
         <div className='bottom'>
           <div className='text-box'>
@@ -278,48 +228,18 @@ class Dashboard extends React.Component {
               <div className='waiting-for-match'>Waiting for match...</div>
             }
           </div>
-          <div className='new-chat'>
-            {!this.state.gotCall &&
-              <div className='language'>
-                {
-                 `${this.props.user.profile.language} / 
-                  ${this.props.user.profile.learning}`
-                }
-              </div>
-            }
-            {this.state.gotCall &&
-              <div className='language'>
-                {this.state.incomingCaller.username} calling
-              </div>
-            }
-            <div className='button-wrapper'>
-              {this.state.gotCall &&
-                <button onClick={this.acceptCall.bind(this)}>
-                  Accept
-                </button>
-              }
-              {this.state.gotCall &&
-                <button onClick={this.declineCall.bind(this)}>
-                  Decline
-                </button>
-              }
-              {!this.state.currentCall && !this.state.recording &&
-                <button onClick={this.startRecording.bind(this)}>
-                  Record
-                </button>
-              }
-              {!this.state.gotCall && this.state.currentCall &&
-                <button onClick={this.endChat.bind(this)}>
-                  End Chat
-                </button>
-              }
-              {!this.state.currentCall && this.state.recording &&
-                <button onClick={this.stopRecording.bind(this)}>
-                  Stop Recording
-                </button>
-              }
-            </div>
-          </div>
+          <ButtonBox 
+            gotCall={this.state.gotCall}
+            user={this.props.user}
+            incomingCaller={this.state.incomingCaller}
+            acceptCall={this.acceptCall.bind(this)}
+            declineCall={this.declineCall.bind(this)}
+            currentCall={this.state.currentCall}
+            recording={this.state.recording}
+            stopRecording={this.stopRecording.bind(this)}
+            startRecording={this.startRecording.bind(this)}
+            endChat={this.endChat.bind(this)}
+          />
         </div>
       </div>
     );

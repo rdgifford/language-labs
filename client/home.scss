@@ -1,0 +1,88 @@
+@import url(https://fonts.googleapis.com/css?family=Quicksand:300,400,700);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+
+$blue: #5fa9d9;
+$gray: rgba(0,0,0,.6);
+$shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
+
+.home-page {
+   height: 100vh;
+   width: 100vw;
+   background: url('/pattern.svg') center center;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   .sign-in {
+     position: absolute;
+     right: 240px;
+     top: 40px;
+   }
+
+   .main-logo {
+     font-size: 90px;
+     color: white;
+   }
+}
+
+.language-select {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .language-form {
+    width: 100vw;
+    max-height: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .form-instructions {
+      color: rgba(0,0,0,.2);
+    }
+
+    input {
+      font-family: 'quicksand';
+      width: calc(50vw - 20px);
+      height: 40px;
+      border: 0px;
+      border-bottom: 1px solid rgba(0,0,0,.3);
+      font-size: 30px;
+      padding: 10px;
+      text-align: center;
+      transition: all .3s;
+
+      &:focus {
+        outline: 0px none;
+        border-bottom: 1px solid #5fa9d9;
+        transition: all .3s;
+      }
+    }
+
+    .submit-button {
+      font-family: 'quicksand';
+      font-size: 20px;
+      cursor: pointer;
+      height: 50px;
+      width: 50vw;
+      margin-top: 30px;
+      border-radius: 4px;
+      border: 1px solid $blue;
+      background-color: transparent;
+      color: $blue;
+      transition: all .3s;
+
+      &:hover {
+        background-color: $blue;
+        color: white;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

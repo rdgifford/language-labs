@@ -1,0 +1,165 @@
+@import url(https://fonts.googleapis.com/css?family=Quicksand:300,400,700);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+
+$blue: #5fa9d9;
+$gray: rgba(0,0,0,.6);
+$shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
+
+.profile {
+  position: relative;
+  flex: 1;
+  margin: 10px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow;
+  background-color: white;
+
+  .userbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 10px;
+    background-color: $blue;
+    color: white;
+  
+      /* The switch - the box around the slider */
+      .switch {
+        display: flex;
+        position: relative;
+        width: 60px;
+        height: 34px;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {display:none;}
+
+      /* The slider */
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .slider {
+        background-color: #A3C8E7;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }   
+
+    #login-name-link {
+      text-decoration: none;
+    }
+  }
+
+  .user-profile {
+    height: 100%;
+    flex: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    .userBtn {
+      cursor: pointer;
+      width: 70%;
+      height: 30px;
+      margin: 5%;
+    }
+
+    .profile-input-wrapper {
+      flex: 1;
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+      align-items: center;
+      flex-direction: column;
+      max-height: 100px;
+
+      i {
+        margin-left: 5px;
+        font-size: 12px
+      }
+
+      .title {
+        flex: 1;
+        display: block;
+        width: 100%;
+        margin-left: 20px;
+        font-size: 12px;
+        max-height: 20px;
+        color: $blue;
+      }
+
+      .profile-input {
+        cursor: text; 
+        width: calc(100% - 20px);
+        padding: 10px;
+        flex: 1;
+        max-height: 30px;
+        border: 0px;
+        border-bottom: 1px solid rgba(0,0,0,.1);
+        outline: none;
+        font-size: 18px;
+        line-height: 30px;
+        transition: all .3s;
+        overflow: auto;
+
+        &:hover {
+          border-bottom: 1px solid $blue;
+        }
+      }
+
+      .editing {
+        cursor: text; 
+        font-family: 'quicksand';
+        padding: 10px;
+        flex: 1;
+        max-height: 30px;
+        font-size: 18px;
+        width: calc(100% - 20px);
+        border: 0px;
+        border-bottom: 1px solid $blue;
+        outline: none;
+        line-height: 30px;
+      }
+    }
+  }
+}
