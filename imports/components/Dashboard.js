@@ -71,9 +71,9 @@ class Dashboard extends React.Component {
     navigator.getUserMedia({ audio: true, video: true }, stream => {
       dashboard.setStreamId(stream.id);
       dashboard.setState({ localStream: stream, currentCall: incomingCall, gotCall: false }, () => {
-        incomingCall.answer(stream);
         incomingCall.on('stream', dashboard.connectStream.bind(dashboard));
         incomingCall.on('close', dashboard.endChat.bind(dashboard));
+        incomingCall.answer(stream);
       });   
     }, err => console.log(err));
   }
