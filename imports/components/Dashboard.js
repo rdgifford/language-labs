@@ -206,7 +206,11 @@ class Dashboard extends React.Component {
       modalIsOpen: false,
     })
   }
+<<<<<<< f047bdc66400bf333e46182943dfc35ca66be782
   
+=======
+
+>>>>>>> (bug) Fix bug where css styles were lost
   changeTab(evt) { //tabTitle
     var i, tabcontent, tablinks;
 

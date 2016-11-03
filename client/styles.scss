@@ -44,8 +44,24 @@ body {
   cursor: pointer;
 }
 
-.hidden {
-  display: none;
+.home-page {
+  height: 100vh;
+  width: 100vw;
+  background: url('/pattern.svg') center center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .sign-in {
+    position: absolute;
+    right: 240px;
+    top: 40px;
+  }
+
+  .main-logo {
+    font-size: 90px;
+    color: white;
+  }
 }
 
 
@@ -75,7 +91,7 @@ body {
       background-color: white;
       overflow: hidden;
       min-width: $left-min-width;
-      
+
       .text-box-content {
         height: 100%;
         display: flex;
@@ -221,17 +237,4 @@ body {
       }
     }
   }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
