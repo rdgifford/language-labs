@@ -123,11 +123,18 @@ class Dashboard extends React.Component {
     this.refs.myVideo.src = null;
     this.refs.theirVideo.src = null;
     this.setState({ 
-      currentCall: false,
       localStream: false,
+      currentCall: false,
       callDone: true,
-      partner: false
+      callLoading: false,
+      partner: false,
+      gotCall: false,
+      incomingCall: false,
+      incomingCaller: false,
+      modalIsOpen: false,
+      showUser: this.props.user,
     });
+    this.props.peer.on('call', this.receiveCall.bind(this));
   }
 
   startRecording() {
