@@ -14,7 +14,7 @@ const VideoBox = ({callDone, callLoading, currentCall, onlineUsers, partner, cle
 				    <div className='loader'></div>
 				  </div>
 	      }
-	      <video id='myVideo' autoPlay='true' 
+	      <video id='myVideo' muted='true' autoPlay='true' 
 	        className={callLoading ? 'hidden' : null}></video>
 	      <video id='theirVideo' autoPlay='true'
 	        className={callLoading ? 'hidden' : null}></video>
