@@ -39,7 +39,7 @@ class Dashboard extends React.Component {
       incomingCall: false,
       incomingCaller: false,
       modalIsOpen: false,
-      showUser: this.props.user,
+      showUser: props.user,
       recorder: false,
       recording: false,
       userListToggle: false,
@@ -53,6 +53,7 @@ class Dashboard extends React.Component {
   }
 
   receiveCall(incomingCall) {
+    if (this.state.localStream) {return;}
     let user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
   }
@@ -65,51 +66,33 @@ class Dashboard extends React.Component {
   acceptCall() {
     let dashboard = this;
     let incomingCall = this.state.incomingCall;
-    dashboard.toggleLoading(true);
 
     navigator.getUserMedia({ audio: true, video: true }, stream => {
-      Meteor.users.update({_id: Meteor.userId()}, {
-        $set: { 'profile.streamId': stream.id }
-      });
 
+      dashboard.toggleLoading(true);
+      dashboard.setStreamId(stream.id);
       dashboard.setState({ localStream: stream, currentCall: incomingCall, gotCall: false });   
 
       incomingCall.answer(stream);
       incomingCall.on('close', () => dashboard.endChat());
-      incomingCall.on('stream', function (theirStream) {
-        dashboard.refs.myVideo.src = URL.createObjectURL(stream);
-        dashboard.refs.theirVideo.src = URL.createObjectURL(theirStream);
-        dashboard.setPartner(theirStream.id);
-        dashboard.toggleLoading(false);
-      });
+      incomingCall.on('stream', dashboard.connectStream.bind(dashboard));
 
     }, err => console.log(err));
   }
 
   startChat(userId, peer) {
+    if (this.state.localStream) {return;}
     let dashboard = this;
+    let user = Meteor.users.findOne({ _id: userId});
     dashboard.closeModal();
     dashboard.toggleLoading(true);
     
     navigator.getUserMedia({ audio: true, video: true }, function (stream) {
-      Meteor.users.update({_id: Meteor.userId()}, {
-        $set: { 'profile.streamId': stream.id }
-      });
-
-      let user = Meteor.users.findOne({ _id: userId});
       let outgoingCall = peer.call(user.profile.peerId, stream);
-
+      dashboard.setStreamId(stream.id);
       dashboard.setState({ currentCall: outgoingCall, localStream: stream });
-
       outgoingCall.on('close', () => dashboard.endChat());
-
-      outgoingCall.on('stream', function (theirStream) {
-        dashboard.refs.myVideo.src = URL.createObjectURL(stream);
-        dashboard.refs.theirVideo.src = URL.createObjectURL(theirStream);
-        dashboard.setPartner(theirStream.id);
-        dashboard.toggleLoading(false);
-      });
-
+      outgoingCall.on('stream', dashboard.connectStream.bind(dashboard));
     }, err => console.log(err));
 
     setTimeout( () => {
@@ -117,19 +100,32 @@ class Dashboard extends React.Component {
     }, 12000);
   }
 
+  setStreamId(id) {
+    Meteor.users.update({_id: Meteor.userId()}, {
+      $set: { 'profile.streamId': id }
+    });
+  }
+
+  connectStream(theirStream) {
+    this.refs.myVideo.src = URL.createObjectURL(this.state.localStream);
+    this.refs.theirVideo.src = URL.createObjectURL(theirStream);
+    this.setPartner(theirStream.id);
+    this.toggleLoading(false);
+  }
+
   endChat() {
-    this.state.currentCall.close();
     this.state.localStream.getTracks().forEach(function(track) {
       track.stop();
     });
     this.toggleLoading(false);
-    this.setPartner(false);
+    this.state.currentCall.close();
     this.refs.myVideo.src = null;
     this.refs.theirVideo.src = null;
     this.setState({ 
       currentCall: false,
       localStream: false,
-      callDone: true 
+      callDone: true,
+      partner: false
     });
   }
 
