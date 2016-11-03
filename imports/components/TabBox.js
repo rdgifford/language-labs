@@ -3,6 +3,7 @@ import React from 'react';
 import _ from 'lodash';
 import TranslateTab from './TranslateTab';
 import ChatTab from './ChatTab';
+import TopicSuggestion from './TopicSuggestion';
 // import keys from '../../config/config';
 
 // const client = new MsTranslator({
@@ -25,7 +26,7 @@ const changeTab = (evt) => {
   evt.currentTarget.className += ' active';
 };
 
-class Tabs extends React.Component {
+class TabBox extends React.Component {
   constructor(props) {
     super(props);
     this.handleTranslateInput = this.handleTranslateInput.bind(this);
@@ -48,9 +49,8 @@ class Tabs extends React.Component {
     return (
       <div className="text-box">
         {
-                // <Clock partner={this.state.partner} callDone={this.state.callDone} />
-                // <TopicSuggestion partner={this.state.partner}/>
-          !this.props.partner &&
+            // <Clock partner={this.props.partner} callDone={this.props.callDone} />
+          this.props.partner &&
           <div className="text-box-content">
             <ul className="tab">
               <li><a href="javascript:void(0)" id="timelink" className="tablinks" onClick={changeTab}>Time</a></li>
@@ -59,7 +59,7 @@ class Tabs extends React.Component {
             </ul>
             <div id="Time" className="tabcontent">
               <div className="clock-suggestion-wrapper">
-                <h1>Hello</h1>
+                <TopicSuggestion partner={this.props.partner}/>
               </div>
             </div>
             <ChatTab />
@@ -67,7 +67,7 @@ class Tabs extends React.Component {
           </div>
         }
         {
-          this.props.partner &&
+          !this.props.partner &&
           <div className="waiting-for-match">Waiting for match...</div>
         }
       </div>
@@ -75,4 +75,4 @@ class Tabs extends React.Component {
   }
 }
 
-module.exports = Tabs;
+module.exports = TabBox;

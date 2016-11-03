@@ -4,6 +4,8 @@
 $blue: #5fa9d9;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
+$right-max-width: 360px;
+$right-min-width: 200px;
 
 .profile {
   position: relative;
@@ -14,6 +16,8 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
   flex-direction: column;
   box-shadow: $shadow;
   background-color: white;
+  max-width: $right-max-width;
+  min-width: $right-min-width;
 
   .userbar {
     display: flex;

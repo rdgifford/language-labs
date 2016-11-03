@@ -4,16 +4,19 @@
 $blue: #5fa9d9;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
+$left-min-width: 400px;
 
 .video-box {
   display: flex;
-  flex: 3;
+  flex: 2;
   background-color: white;
   margin: 10px;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   box-shadow: $shadow;
+  min-width: $left-min-width;
+  text-align: center;
 
   .hidden {
     height: 0px;
@@ -152,8 +155,6 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
     height: 100%;
     border-radius: 4px;
     overflow: hidden;
-
-
 
     #myVideo {
       position: absolute;

@@ -6,20 +6,10 @@ import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile';
 import TopicSuggestion   from './TopicSuggestion';
-<<<<<<< 53a410d201dd2fb28d65ef9b5f2ab281de761f9d
 import VideoBox          from './VideoBox';
 import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
-import Tabs from './Tabs';
-=======
-import Review            from './Review';
-import Waiting           from './Waiting';
-import Welcome           from './Welcome';
-import UserList          from './UserList';
-import Modal             from 'react-modal';
-import Toggle            from './Toggle';
 import TabBox from './TabBox';
->>>>>>> (refactor) Separate tabBox css into a new file
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -54,14 +44,8 @@ class Dashboard extends React.Component {
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
   }
 
-  componentDidMount() {
-    if (!this.state.partner) {
-      document.getElementById('timelink').click();
-    }
-  }
-
   componentDidUpdate() {
-    if (!this.state.partner) {
+    if (this.state.partner) {
       document.getElementById('timelink').click();
     }
   }
@@ -181,8 +165,7 @@ class Dashboard extends React.Component {
   
   toggleLoading(loading) {
     this.setState({
-      currentCall: false,
-      callDone: true,
+      callLoading: loading
     });
   }
 
@@ -216,27 +199,6 @@ class Dashboard extends React.Component {
       modalIsOpen: false,
     })
   }
-<<<<<<< f047bdc66400bf333e46182943dfc35ca66be782
-  
-=======
-
->>>>>>> (bug) Fix bug where css styles were lost
-  changeTab(evt) { //tabTitle
-    var i, tabcontent, tablinks;
-
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    document.getElementById(evt.currentTarget.text).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
 
   render() {
     return (
@@ -263,8 +225,10 @@ class Dashboard extends React.Component {
           />
         </div>
         <div className='bottom'>
-<<<<<<< 53a410d201dd2fb28d65ef9b5f2ab281de761f9d
-          <Tabs partner={this.state.partner} />
+          <TabBox
+            partner={this.state.partner}
+            callDone={this.state.callDone}
+          />
           <ButtonBox 
             gotCall={this.state.gotCall}
             user={this.props.user}
@@ -277,51 +241,6 @@ class Dashboard extends React.Component {
             startRecording={this.startRecording.bind(this)}
             endChat={this.endChat.bind(this)}
           />
-=======
-          <TabBox partner={this.state.partner} />
-          <div className='new-chat'>
-            {!this.state.gotCall &&
-              <div className='language'>
-                {
-                 `${this.props.user.profile.language} / 
-                  ${this.props.user.profile.learning}`
-                }
-              </div>
-            }
-            {this.state.gotCall &&
-              <div className='language'>
-                {this.state.incomingCaller.username} calling
-              </div>
-            }
-            <div className='button-wrapper'>
-              {this.state.gotCall &&
-                <button onClick={this.acceptCall.bind(this)}>
-                  Accept
-                </button>
-              }
-              {this.state.gotCall &&
-                <button onClick={this.declineCall.bind(this)}>
-                  Decline
-                </button>
-              }
-              {!this.state.currentCall && !this.state.recording &&
-                <button onClick={this.startRecording.bind(this)}>
-                  Record
-                </button>
-              }
-              {!this.state.gotCall && this.state.currentCall &&
-                <button onClick={this.endChat.bind(this)}>
-                  End Chat
-                </button>
-              }
-              {!this.state.currentCall && this.state.recording &&
-                <button onClick={this.stopRecording.bind(this)}>
-                  Stop Recording
-                </button>
-              }
-            </div>
-          </div>
->>>>>>> (refactor) Separate tabBox css into a new file
         </div>
       </div>
     );

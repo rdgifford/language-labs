@@ -4,6 +4,8 @@
 $blue: #5fa9d9;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
+$right-max-width: 360px;
+$right-min-width: 200px;
 
 .new-chat {
   flex: 1;
@@ -13,6 +15,9 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
   background-color: white;
   display: flex;
   flex-direction: column;
+  max-width: $right-max-width; 
+  min-width: $right-min-width;
+  text-align: center;
 
   .selected-language {
     color: $blue;
@@ -28,7 +33,7 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 16px;
   }
 
   .button-wrapper {
