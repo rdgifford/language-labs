@@ -1,5 +1,7 @@
-import React             from 'react';
-import { Meteor }        from 'meteor/meteor';
+import _ from 'lodash';
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import AccountsUIWrapper from './accounts';
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile';
@@ -7,8 +9,7 @@ import TopicSuggestion   from './TopicSuggestion';
 import VideoBox          from './VideoBox';
 import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
-import TranslateTab from './TranslateTab';
-import ChatTab from './ChatTab';
+import Tabs from './Tabs';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -170,7 +171,8 @@ class Dashboard extends React.Component {
   
   toggleLoading(loading) {
     this.setState({
-      callLoading: loading
+      currentCall: false,
+      callDone: true,
     });
   }
 
@@ -185,10 +187,10 @@ class Dashboard extends React.Component {
     }, 1000)
   }
 
-  clearPartner () {
+  clearPartner() {
     this.setState({
       partner: false,
-      callDone: false
+      callDone: false,
     });
   }
 
@@ -247,32 +249,7 @@ class Dashboard extends React.Component {
           />
         </div>
         <div className='bottom'>
-          <div className='text-box'>
-            {
-                    // <Clock partner={this.state.partner} callDone={this.state.callDone} />
-                    // <TopicSuggestion partner={this.state.partner}/>
-              !this.state.partner &&
-              <div className="text-box-content">
-                <ul className="tab">
-
-                  <li><a href="javascript:void(0)" id="timelink" className="tablinks" onClick={this.changeTab}>Time</a></li>
-                  <li><a href="javascript:void(0)" className="tablinks" onClick={this.changeTab}>Chat</a></li>                  
-                  <li><a href="javascript:void(0)" className="tablinks" onClick={this.changeTab}>Translate</a></li>
-                </ul>
-                <div id="Time" className="tabcontent">
-                  <div className="clock-suggestion-wrapper">
-                    <h1>Hello</h1>
-                  </div>
-                </div>
-                <ChatTab />
-                <TranslateTab />
-              </div>
-            }
-            {
-              this.state.partner &&
-              <div className='waiting-for-match'>Waiting for match...</div>
-            }
-          </div>
+          <Tabs partner={this.state.partner} />
           <ButtonBox 
             gotCall={this.state.gotCall}
             user={this.props.user}

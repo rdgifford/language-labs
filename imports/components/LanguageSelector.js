@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
 const LanguageSelector = (props) => (
-  <select className="tw-lang-selector" id={props.id} defaultValue="en">
+  <select id={props.id} defaultValue="en">
     <option value="af">
       Afrikaans
     </option>

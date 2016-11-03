@@ -78,6 +78,8 @@ body {
       
       .text-box-content {
         height: 100%;
+        display: flex;
+        flex-direction: column;
 
         .tab {
           list-style-type: none;
@@ -96,7 +98,7 @@ body {
               padding: 2px 4px;
               text-decoration: none;
               transition: 0.3s;
-              font-size: 17px;              
+              font-size: 17px;
             }
 
             a:hover {
@@ -109,104 +111,17 @@ body {
           }
         }
 
-        #Translate {
-          height: 85%;
+        .translate-container {
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+          // justify-content: flex-start;
 
-          #tw-container {
-            padding: 10px 20px 10px 20px;
-
-            #tw-ob {
-              display: flex;
-            }
-
-            #tw-source {
-              width: 0;
-
-              #tw-source-text-container {
-                padding-top: 20px;
-
-                textarea {
-                  text-rendering: auto;
-                  color: initial;
-                  letter-spacing: normal;
-                  word-spacing: normal;
-                  text-transform: none;
-                  text-indent: 0px;
-                  text-shadow: none;
-                  display: inline-block;
-                }
-
-                #tw-source-text-ta {
-                  margin-bottom: 0px;
-                  position: absolute;
-                  top: 20px;
-                  z-index: 2;
-                }
-              }
-            }
-
-            #tw-swapa {
-              padding: 0 20px;
-              position: relative;
-              flex-shrink: 0;
-              height: 100%;
-              color: #212121 !important;
-              width: 1px;
-            }
-            
-            #tw-target {
-              #tw-target-text-container {
-                // padding-top: 20px;
-              }
-            }
-
-            #tw-source,
-            #tw-target {
-              // font-size: 0;
-              padding: 30px 0 50px;
-              flex: 1;
-              height: 100%;
-              margin: 0;
-              position: relative;
-              text-align: left;
-
-              .tw-ta-container {
-                
-              }
-              
-              .tw-lang-selector-wrapper {
-                border: 1px solid white;
-                border-radius: 0 0 2px 2px;
-                overflow: hidden;
-                position: absolute;
-              }
-
-              .tw-data-placeholder { 
-                   color: #878787 !important;
-              }
-
-              .tw-text-large {
-                font-size: 12px !important;
-                line-height: 16px !important;
-                margin-bottom: -10px !important;
-              }
-
-              .tw-ta {
-                background-color: transparent;
-                border: none;
-                padding: 0;
-                padding-right: 0.14em;
-                position: relative;
-                margin: 0;
-                resize: none;
-                font-family: inherit;
-                overflow: hidden;
-                text-align: initial;
-                width: 100%;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-              }
-            }
+          .targetTextContainer,
+          .sourceTextContainer {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
           }
         }
 
