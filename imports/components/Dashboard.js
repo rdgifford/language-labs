@@ -66,14 +66,14 @@ class Dashboard extends React.Component {
   acceptCall() {
     let dashboard = this;
     let incomingCall = this.state.incomingCall;
+    dashboard.toggleLoading(true);
 
     navigator.getUserMedia({ audio: true, video: true }, stream => {
-      dashboard.toggleLoading(true);
       dashboard.setStreamId(stream.id);
       dashboard.setState({ localStream: stream, currentCall: incomingCall, gotCall: false }, () => {
         incomingCall.answer(stream);
-        incomingCall.on('close', () => dashboard.endChat());
         incomingCall.on('stream', dashboard.connectStream.bind(dashboard));
+        incomingCall.on('close', dashboard.endChat.bind(dashboard));
       });   
     }, err => console.log(err));
   }
@@ -88,14 +88,15 @@ class Dashboard extends React.Component {
     navigator.getUserMedia({ audio: true, video: true }, function (stream) {
       let outgoingCall = peer.call(user.profile.peerId, stream);
       dashboard.setStreamId(stream.id);
+
       dashboard.setState({ currentCall: outgoingCall, localStream: stream }, () => {
         outgoingCall.on('stream', dashboard.connectStream.bind(dashboard));
-        outgoingCall.on('close', () => dashboard.endChat());
+        outgoingCall.on('close', dashboard.endChat.bind(dashboard));
       });
     }, err => console.log(err));
 
     setTimeout( () => {
-      dashboard.state.partner || dashboard.endChat();
+      dashboard.state.callLoading && dashboard.endChat();
     }, 12000);
   }
 
@@ -113,11 +114,12 @@ class Dashboard extends React.Component {
   }
 
   endChat() {
+    console.log('ended');
+    this.state.currentCall.close();
     this.state.localStream.getTracks().forEach(function(track) {
       track.stop();
     });
     this.toggleLoading(false);
-    this.state.currentCall.close();
     this.refs.myVideo.src = null;
     this.refs.theirVideo.src = null;
     this.setState({ 
@@ -263,7 +265,6 @@ class Dashboard extends React.Component {
             { 
               this.state.partner &&
               <div className='clock-suggestion-wrapper'>
-                <Clock partner={this.state.partner} callDone={this.state.callDone} />
                 <TopicSuggestion partner={this.state.partner}/>
               </div>
             }
