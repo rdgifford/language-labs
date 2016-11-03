@@ -76,134 +76,144 @@ body {
       overflow: hidden;
       min-width: $left-min-width;
       
-      .tab {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #f1f1f1;
+      .text-box-content {
+        height: 100%;
 
-        li {
-          float: left;
+        .tab {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #f1f1f1;
 
-          a {
-            display: inline-block;
-            color: black;
-            text-align: center;
-            padding: 2px 4px;
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 17px;              
-          }
+          li {
+            float: left;
 
-          a:hover {
-            background-color: #ddd;
-          }
+            a {
+              display: inline-block;
+              color: black;
+              text-align: center;
+              padding: 2px 4px;
+              text-decoration: none;
+              transition: 0.3s;
+              font-size: 17px;              
+            }
 
-          a:focus, .active {
-            background-color: #ccc;
+            a:hover {
+              background-color: #ddd;
+            }
+
+            a:focus, .active {
+              background-color: #ccc;
+            }
           }
         }
-      }
 
-      #Translate {
-        #tw-container {
-          padding: 10px 20px 10px 20px;
+        #Translate {
+          height: 85%;
 
-          #tw-ob {
-            display: flex;
-          }
+          #tw-container {
+            padding: 10px 20px 10px 20px;
 
-          #tw-source {
-            padding: 30px 0 50px;
-            flex: 1;
-            width: 0;
+            #tw-ob {
+              display: flex;
+            }
 
-            #tw-source-text-container {
-              padding-top: 20px;
+            #tw-source {
+              width: 0;
 
-              textarea {
-                text-rendering: auto;
-                color: initial;
-                letter-spacing: normal;
-                word-spacing: normal;
-                text-transform: none;
-                text-indent: 0px;
-                text-shadow: none;
-                display: inline-block;
+              #tw-source-text-container {
+                padding-top: 20px;
+
+                textarea {
+                  text-rendering: auto;
+                  color: initial;
+                  letter-spacing: normal;
+                  word-spacing: normal;
+                  text-transform: none;
+                  text-indent: 0px;
+                  text-shadow: none;
+                  display: inline-block;
+                }
+
+                #tw-source-text-ta {
+                  margin-bottom: 0px;
+                  position: absolute;
+                  top: 20px;
+                  z-index: 2;
+                }
               }
-
-              #tw-source-text-ta {
-                margin-bottom: 0px;
-                position: absolute;
-                top: 20px;
-                z-index: 2;
-              }
-            }
-          }
-
-          #tw-swapa {
-            padding: 0 20px;
-            position: relative;
-            flex-shrink: 0;
-            height: 100%;
-            color: #212121 !important;
-            width: 1px;
-          }
-          
-          #tw-target {
-            padding: 30px 0 50px;
-            flex: 1;
-            
-            #tw-target-text-container {
-              // padding-top: 20px;
-            }
-          }
-
-          #tw-source,
-          #tw-target {
-            // font-size: 0;
-            margin: 0;
-            position: relative;
-            text-align: left;
-            // padding-bottom: 69px;
-
-            .tw-ta-container {
-              
-            }
-            
-            .tw-data-placeholder { 
-                 color: #878787 !important;
             }
 
-            .tw-text-large {
-              font-size: 12px !important;
-              line-height: 16px !important;
-              margin-bottom: -10px !important;
-            }
-
-            .tw-ta {
-              background-color: transparent;
-              border: none;
-              padding: 0;
-              padding-right: 0.14em;
+            #tw-swapa {
+              padding: 0 20px;
               position: relative;
+              flex-shrink: 0;
+              height: 100%;
+              color: #212121 !important;
+              width: 1px;
+            }
+            
+            #tw-target {
+              #tw-target-text-container {
+                // padding-top: 20px;
+              }
+            }
+
+            #tw-source,
+            #tw-target {
+              // font-size: 0;
+              padding: 30px 0 50px;
+              flex: 1;
+              height: 100%;
               margin: 0;
-              resize: none;
-              font-family: inherit;
-              overflow: hidden;
-              text-align: initial;
-              width: 100%;
-              white-space: pre-wrap;
-              word-wrap: break-word;
+              position: relative;
+              text-align: left;
+
+              .tw-ta-container {
+                
+              }
+              
+              .tw-lang-selector-wrapper {
+                border: 1px solid white;
+                border-radius: 0 0 2px 2px;
+                overflow: hidden;
+                position: absolute;
+              }
+
+              .tw-data-placeholder { 
+                   color: #878787 !important;
+              }
+
+              .tw-text-large {
+                font-size: 12px !important;
+                line-height: 16px !important;
+                margin-bottom: -10px !important;
+              }
+
+              .tw-ta {
+                background-color: transparent;
+                border: none;
+                padding: 0;
+                padding-right: 0.14em;
+                position: relative;
+                margin: 0;
+                resize: none;
+                font-family: inherit;
+                overflow: hidden;
+                text-align: initial;
+                width: 100%;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+              }
             }
           }
         }
-      }
 
-      .tabcontent {
-          display: none;
-          border-top: none;
+        .tabcontent {
+            display: none;
+            border-top: none;
+        }        
       }
 
       .waiting-for-match {

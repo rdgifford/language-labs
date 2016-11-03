@@ -7,7 +7,8 @@ import TopicSuggestion   from './TopicSuggestion';
 import VideoBox          from './VideoBox';
 import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
-
+import TranslateTab from './TranslateTab';
+import ChatTab from './ChatTab';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -202,7 +203,8 @@ class Dashboard extends React.Component {
     this.setState({
       modalIsOpen: false,
     })
-
+  }
+  
   changeTab(evt) { //tabTitle
     var i, tabcontent, tablinks;
 
@@ -250,7 +252,7 @@ class Dashboard extends React.Component {
                     // <Clock partner={this.state.partner} callDone={this.state.callDone} />
                     // <TopicSuggestion partner={this.state.partner}/>
               !this.state.partner &&
-              <div>
+              <div className="text-box-content">
                 <ul className="tab">
 
                   <li><a href="javascript:void(0)" id="timelink" className="tablinks" onClick={this.changeTab}>Time</a></li>
@@ -262,32 +264,9 @@ class Dashboard extends React.Component {
                     <h1>Hello</h1>
                   </div>
                 </div>
-                <div id="Chat" className="tabcontent">
-                  <h1>2</h1>
-                </div>                
-                <div id="Translate" className="tabcontent">
-                  <div id="tw-container">
-                    <div id="tw-ob">
-                      <div id="tw-source">
-                        <div className="tw-ta-container" id="tw-source-text-container">
-                          <textarea className="tw-data-placeholder tw-ta tw-text-large" id="tw-source-text-ta" cols="20" rows="8" placeholder="Enter text">
-                          </textarea>
-                        </div>
-                      </div>
-                      <div id="tw-target">
-                        <div className="tw-ta-container" id="tw-target-text-container">
-                          <span className="tw-ta tw-text-large" id="tw-target-text-ta" cols="20" rows="8">Translate</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ChatTab />
+                <TranslateTab />
               </div>
-                          // <pre className="tw-data-placeholder tw-ta tw-text-large" data-placeholder="Enter text" id="tw-source-text" style="text-align: left; height: 20px;">
-                          //   <span lang="en">Enter text</span>
-                          // </pre>
-                  // <div className="tw-swapa">
-                  // </div>
             }
             {
               this.state.partner &&
