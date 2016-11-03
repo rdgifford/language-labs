@@ -1,4 +1,4 @@
 module.exports = {
-  client_id: '37a6eb1e-3efd-45c6-8ecf-bee815bcc6d8',
-  client_secret: 'b74847015569431c9fcf43806e86b9d4',
+  client_id: 'wildhogs42',
+  client_secret: 'Lw5JA6bZF/uqZA2KPBF1jYLT7kvB2ycqfOP4QaJhtZI=',
 };

@@ -1,14 +1,14 @@
 import React from 'react';
-import MsTranslator from 'mstranslator';
+// import MsTranslator from 'mstranslator';
 import _ from 'lodash';
 import TranslateTab from './TranslateTab';
 import ChatTab from './ChatTab';
-import keys from '../../config/config';
+// import keys from '../../config/config';
 
-const client = new MsTranslator({
-  client_id: keys.client_id,
-  client_secret: keys.client_secret,
-});
+// const client = new MsTranslator({
+//   client_id: keys.client_id,
+//   client_secret: keys.client_secret,
+// }, true);
 
 const changeTab = (evt) => {
   const tabcontent = document.getElementsByClassName('tabcontent');
@@ -25,17 +25,23 @@ const changeTab = (evt) => {
   evt.currentTarget.className += ' active';
 };
 
-
 class Tabs extends React.Component {
   constructor(props) {
     super(props);
-    // this.handleTranslateInput = _.debounce(this.handleTranslateInput, 200);
+    this.handleTranslateInput = this.handleTranslateInput.bind(this);
+    this.translate = _.debounce(this.translate, 200);
   }
 
   handleTranslateInput(e) {
-    // e.persist();
-    const t = e.currentTarget.value;
-    console.log(t);
+    this.translate(e.currentTarget.value);
+  }
+
+  translate(text) {
+    const params = {
+      text,
+      from: 'en',
+      to: 'es',
+    };
   }
 
   render() {
@@ -67,6 +73,6 @@ class Tabs extends React.Component {
       </div>
     );
   }
-};
+}
 
 module.exports = Tabs;
