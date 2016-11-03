@@ -114,7 +114,6 @@ class Dashboard extends React.Component {
   }
 
   endChat() {
-    console.log('ended');
     this.state.currentCall.close();
     this.state.localStream.getTracks().forEach(function(track) {
       track.stop();
@@ -132,7 +131,6 @@ class Dashboard extends React.Component {
       incomingCall: false,
       incomingCaller: false,
       modalIsOpen: false,
-      showUser: this.props.user,
     });
     this.props.peer.on('call', this.receiveCall.bind(this));
   }
