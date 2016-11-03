@@ -64,7 +64,6 @@ class Dashboard extends React.Component {
   acceptCall() {
     let dashboard = this;
     let incomingCall = this.state.incomingCall;
-    dashboard.toggleLoading(true);
 
     navigator.getUserMedia({ audio: true, video: true }, stream => {
       dashboard.setStreamId(stream.id);
@@ -86,7 +85,6 @@ class Dashboard extends React.Component {
     navigator.getUserMedia({ audio: true, video: true }, function (stream) {
       let outgoingCall = peer.call(user.profile.peerId, stream);
       dashboard.setStreamId(stream.id);
-
       dashboard.setState({ currentCall: outgoingCall, localStream: stream }, () => {
         outgoingCall.on('stream', dashboard.connectStream.bind(dashboard));
         outgoingCall.on('close', dashboard.endChat.bind(dashboard));
@@ -164,27 +162,20 @@ class Dashboard extends React.Component {
   }
 
   switchToggle() {
-    this.setState({
-      userListToggle: !this.state.userListToggle 
-    });
+    this.setState({ userListToggle: !this.state.userListToggle });
   }
   
   toggleLoading(loading) {
-    this.setState({
-      callLoading: loading
-    });
+    this.setState({ callLoading: loading });
   }
 
   setPartner(id) {
     setTimeout( () => {
       var partner = Meteor.users.findOne({ 'profile.streamId': id });
-      if (partner) {
-        this.setState({
-          partner: partner
-        });
-      }
+      if (partner) { this.setState({ partner: partner }); }
     }, 1000)
   }
+
 
   clearPartner() {
     this.setState({
@@ -193,17 +184,13 @@ class Dashboard extends React.Component {
     });
   }
 
+
   openModal(user) {
-    this.setState({
-      modalIsOpen: true,
-      showUser: user
-    })
+    this.setState({ modalIsOpen: true, showUser: user })
   }
 
   closeModal() {
-    this.setState({
-      modalIsOpen: false,
-    })
+    this.setState({ modalIsOpen: false })
   }
 
   render() {
