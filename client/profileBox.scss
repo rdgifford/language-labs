@@ -7,6 +7,19 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
 $right-max-width: 360px;
 $right-min-width: 200px;
 
+.modalHeader {
+  align-self: center;
+  text-align: center;
+}
+
+.startCall {
+  align-self: center;
+  text-align: center;
+  border: solid 2px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
 .profile {
   position: relative;
   flex: 1;

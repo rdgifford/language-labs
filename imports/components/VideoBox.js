@@ -1,7 +1,6 @@
 import React             from 'react';
 import Welcome           from './Welcome';
 import Review            from './Review';
-import Waiting           from './Waiting';
 
 const VideoBox = ({callDone, callLoading, currentCall, onlineUsers, partner, clearPartner}) => (
 	<div className='video-box'>
@@ -11,14 +10,14 @@ const VideoBox = ({callDone, callLoading, currentCall, onlineUsers, partner, cle
 	        <Welcome numMatches={onlineUsers.length}/>
 	      }
 	      {callLoading && 
-	        <Waiting />
+	        <div className='waiting'>
+				    <div className='loader'></div>
+				  </div>
 	      }
-
-	      <video id='myVideo' muted='true' autoPlay='true' 
+	      <video id='myVideo' autoPlay='true' 
 	        className={callLoading ? 'hidden' : null}></video>
-	      <video id='theirVideo' muted='true' autoPlay='true'
+	      <video id='theirVideo' autoPlay='true'
 	        className={callLoading ? 'hidden' : null}></video>
-
 	    </div>
 	  }
 
