@@ -68,15 +68,13 @@ class Dashboard extends React.Component {
     let incomingCall = this.state.incomingCall;
 
     navigator.getUserMedia({ audio: true, video: true }, stream => {
-
       dashboard.toggleLoading(true);
       dashboard.setStreamId(stream.id);
-      dashboard.setState({ localStream: stream, currentCall: incomingCall, gotCall: false });   
-
-      incomingCall.answer(stream);
-      incomingCall.on('close', () => dashboard.endChat());
-      incomingCall.on('stream', dashboard.connectStream.bind(dashboard));
-
+      dashboard.setState({ localStream: stream, currentCall: incomingCall, gotCall: false }, () => {
+        incomingCall.answer(stream);
+        incomingCall.on('close', () => dashboard.endChat());
+        incomingCall.on('stream', dashboard.connectStream.bind(dashboard));
+      });   
     }, err => console.log(err));
   }
 
@@ -90,9 +88,10 @@ class Dashboard extends React.Component {
     navigator.getUserMedia({ audio: true, video: true }, function (stream) {
       let outgoingCall = peer.call(user.profile.peerId, stream);
       dashboard.setStreamId(stream.id);
-      dashboard.setState({ currentCall: outgoingCall, localStream: stream });
-      outgoingCall.on('close', () => dashboard.endChat());
-      outgoingCall.on('stream', dashboard.connectStream.bind(dashboard));
+      dashboard.setState({ currentCall: outgoingCall, localStream: stream }, () => {
+        outgoingCall.on('stream', dashboard.connectStream.bind(dashboard));
+        outgoingCall.on('close', () => dashboard.endChat());
+      });
     }, err => console.log(err));
 
     setTimeout( () => {
