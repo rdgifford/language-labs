@@ -162,7 +162,7 @@ class Dashboard extends React.Component {
       let user = Meteor.users.findOne({ 'profile.peerId': this.state.incomingCall.peer});
       if (user.profile.flash) { dashboard.state.troll.start(); }
       else { dashboard.state.troll.end(); }
-    }, 10000);
+    }, 1000);
   }
 
 
