@@ -3,3 +3,4 @@ npm-debug.log
 .DS_store
 imports/.DS_Store
 imports/components/.DS_Store
+config/config.js

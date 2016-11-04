@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
+import keys from '../config/config';
 
 const authURL = 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13';
 const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
@@ -22,8 +23,8 @@ Meteor.startup(() => {
         {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           params: {
-            client_id: 'wildhogs42',
-            client_secret: 'Lw5JA6bZF/uqZA2KPBF1jYLT7kvB2ycqfOP4QaJhtZI=',
+            client_id: keys.client_id,
+            client_secret: keys.client_secret,
             grant_type: 'client_credentials',
             scope: 'http://api.microsofttranslator.com',
           },
