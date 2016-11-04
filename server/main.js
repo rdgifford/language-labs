@@ -7,7 +7,7 @@ const authURL = 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13';
 const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
 let counter = 0;
 
-Meteor.startup(function () {
+Meteor.startup(() => {
   // Slingshot.fileRestrictions('uploadToAmazonS3', {
   //   allowedFileTypes: null,
   //   maxSize: 10 * 1024 * 1024,
@@ -25,7 +25,6 @@ Meteor.startup(function () {
   //   },
   // });
 
-Meteor.startup(() => {
   Meteor.publish('presences', () => {
     return Presences.find({}, { userId: true });
   });
@@ -33,7 +32,6 @@ Meteor.startup(() => {
   Meteor.publish('users', () => Meteor.users.find({}));
 
   Meteor.publish('videos', function() {
-    // const Videos = new Mongo.Collection('videos');
     return Videos.find({});
   });
 
