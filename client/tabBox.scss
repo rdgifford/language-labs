@@ -30,7 +30,13 @@ $left-min-width: 400px;
       li {
         float: left;
 
-        a {
+        button {
+          background: none;
+          border: none;
+          color: blue;
+        }
+        
+        button {
           display: inline-block;
           color: black;
           text-align: center;
@@ -40,11 +46,11 @@ $left-min-width: 400px;
           font-size: 17px;
         }
 
-        a:hover {
+        button:hover {
           background-color: #ddd;
         }
 
-        a:focus, .active {
+        button:focus, .active {
           background-color: #ccc;
         }
       }

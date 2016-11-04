@@ -15,10 +15,11 @@ const changeTab = (evt) => {
     tablinks[i].className = tablinks[i].className.replace(' active', '');
   }
 
-  document.getElementById(evt.currentTarget.text).style.display = 'flex';
+  document.getElementById(evt.currentTarget.textContent).style.display = 'flex';
   evt.currentTarget.className += ' active';
-};
 
+  return false;
+};
 
 class TabBox extends React.Component {
   render() {
@@ -30,13 +31,18 @@ class TabBox extends React.Component {
           !this.props.partner &&
           <div className="text-box-content">
             <ul className="tab">
-              <li><a href="javascript:void(0)" id="timelink" className="tablinks" onClick={changeTab}>Time</a></li>
-              <li><a href="javascript:void(0)" className="tablinks" onClick={changeTab}>Chat</a></li>
-              <li><a href="javascript:void(0)" className="tablinks" onClick={changeTab}>Translate</a></li>
+              <li><button id="timelink" className="tablinks" onClick={changeTab}>
+                Time
+              </button></li>
+              <li><button className="tablinks" onClick={changeTab}>
+                Chat
+              </button></li>
+              <li><button className="tablinks" onClick={changeTab}>
+                Translate
+              </button></li>
             </ul>
             <div id="Time" className="tabcontent">
-              <div className="clock-suggestion-wrapper">
-              </div>
+              <div className="clock-suggestion-wrapper" />
             </div>
             <ChatTab />
             <TranslateTab />
