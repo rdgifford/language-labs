@@ -1,28 +1,29 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import keys from '../config/config';
+import { Videos } from '../imports/collections.js';
 
 const authURL = 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13';
 const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
 let counter = 0;
 
 Meteor.startup(function () {
-  Slingshot.fileRestrictions('uploadToAmazonS3', {
-    allowedFileTypes: null,
-    maxSize: 10 * 1024 * 1024,
-  });
+  // Slingshot.fileRestrictions('uploadToAmazonS3', {
+  //   allowedFileTypes: null,
+  //   maxSize: 10 * 1024 * 1024,
+  // });
 
-  Slingshot.createDirective('uploadToAmazonS3', Slingshot.S3Storage, {
-    region: 'us-west-1',
-    authorize: () => {
-      return true;
-    },
-    bucket: 'languagedotnext',
-    acl: 'public-read',
-    key: () => {
-      return String(++counter);
-    },
-  });
+  // Slingshot.createDirective('uploadToAmazonS3', Slingshot.S3Storage, {
+  //   region: 'us-west-1',
+  //   authorize: () => {
+  //     return true;
+  //   },
+  //   bucket: 'languagedotnext',
+  //   acl: 'public-read',
+  //   key: () => {
+  //     return String(++counter);
+  //   },
+  // });
 
 Meteor.startup(() => {
   Meteor.publish('presences', () => {
@@ -32,7 +33,8 @@ Meteor.startup(() => {
   Meteor.publish('users', () => Meteor.users.find({}));
 
   Meteor.publish('videos', function() {
-    return Meteor.videos.find({});
+    // const Videos = new Mongo.Collection('videos');
+    return Videos.find({});
   });
 
   Meteor.methods({

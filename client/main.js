@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import '../imports/accountsConfig.js';
 import './styles.scss';
-
+import { Videos }          from '../imports/collections.js';
 /* ------------------------- PEER.JS INIT ------------------------- */
 const peer = new Peer({
   key: 'zzak1w02wffuhaor',
@@ -28,9 +28,12 @@ const AppContainer = createContainer(() => {
 
   const presencesSub = Meteor.subscribe('presences');
   const usersSub     = Meteor.subscribe('users');
+  const videosSub    = Meteor.subscribe('videos');
+  // we only want videos of users, add later
+  const videos       = Videos.find().fetch();  
   const user         = Meteor.users.findOne(Meteor.userId());
   const userIds      = Meteor.presences.find().map(presence => presence.userId);
-  const loading      = !usersSub.ready() && !presencesSub.ready();
+  const loading      = !usersSub.ready() && !presencesSub.ready() && !videosSub.ready();
   
   const onlineUsers  = Meteor.users.find({ 
     $and: [ 
@@ -39,7 +42,7 @@ const AppContainer = createContainer(() => {
     ] 
   }).fetch();
 
-  return { onlineUsers, user, loading, peer };
+  return { onlineUsers, user, loading, peer, videos };
 
 }, App);
 
