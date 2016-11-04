@@ -5,11 +5,14 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "aws-sdk": "^2.6.13",
     "bcrypt": "^0.8.7",
     "eslint": "^3.9.1",
     "lodash": "^4.16.6",
     "meteor-node-stubs": "~0.2.0",
     "mstranslator": "^2.0.8",
+
+
     "react": "^15.3.2",
     "react-addons-pure-render-mixin": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -24,5 +27,6 @@
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.5.0"
+    "react-popup": "^0.4.2"
   }
 }
