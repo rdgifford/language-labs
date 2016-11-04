@@ -52,16 +52,15 @@ class TabBox extends React.Component {
   }
 
   translate(text) {
-    const from = 'en';
-    const to = 'es';
+    const from = document.getElementById('lang-selector-1').value;
+    const to = document.getElementById('lang-selector-2').value;
     const token = this.token;
     Meteor.call('translate', { text, from, to, token },
       (err, res) => {
         if (err) {
           console.error(err);
         } else {
-          // console.log(JSON.parse(res));
-          console.log(JSON.parse(res.content));
+          document.getElementById('targetText').textContent = JSON.parse(res.content);
         }
       });
   }

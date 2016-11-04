@@ -10,7 +10,7 @@ const TranslateTab = props => (
 
     <div className="targetTextContainer">
       <LanguageSelector id="lang-selector-2" />
-      <span>Translate</span>
+      <span id="targetText">Translate</span>
     </div>
   </div>
 );
