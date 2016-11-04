@@ -4,12 +4,6 @@ import _ from 'lodash';
 import TranslateTab from './TranslateTab';
 import ChatTab from './ChatTab';
 import TopicSuggestion from './TopicSuggestion';
-// import keys from '../../config/config';
-
-// const client = new MsTranslator({
-//   client_id: keys.client_id,
-//   client_secret: keys.client_secret,
-// }, true);
 
 const changeTab = (evt) => {
   const tabcontent = document.getElementsByClassName('tabcontent');
@@ -60,7 +54,7 @@ class TabBox extends React.Component {
         if (err) {
           console.error(err);
         } else {
-          document.getElementById('targetText').textContent = JSON.parse(res.content);
+          document.getElementById('targetText').value = JSON.parse(res.content);
         }
       });
   }
