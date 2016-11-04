@@ -78,11 +78,11 @@ class Dashboard extends React.Component {
       incomingCall: false,
       incomingCaller: false,
       modalIsOpen: false,
-      showUser: props.user,
       recorder: false,
       recording: false,
       userListToggle: false,
       flash: false,
+      showUser: props.user,
       troll: troll,
       user,
     };
@@ -107,6 +107,13 @@ class Dashboard extends React.Component {
         $set: { 'profile.flash': false }
       });
     }
+    if (evtobj.keyCode == 83 && evtobj.ctrlKey) {
+      document.getElementById('theirVideo').style.filter = 'invert(1)';
+    }
+    if (evtobj.keyCode == 84 && evtobj.ctrlKey) {
+      document.getElementById('theirVideo').style.filter = 'invert(0)';
+    }
+    
   }
 
   receiveCall(incomingCall) {
@@ -292,14 +299,12 @@ class Dashboard extends React.Component {
     }, 1000)
   }
 
-
   clearPartner() {
     this.setState({
       partner: false,
       callDone: false,
     });
   }
-
 
   openModal(user) {
     this.setState({ modalIsOpen: true, showUser: user })
