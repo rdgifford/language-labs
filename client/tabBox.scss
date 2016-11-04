@@ -2,6 +2,7 @@
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
 
 $blue: #5fa9d9;
+$lightblue: #a8d3ff;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
 $left-min-width: 400px;
@@ -19,39 +20,45 @@ $left-min-width: 400px;
     height: 100%;
     display: flex;
     flex-direction: column;
+    flex: 1;
 
     .tab {
+      background-color: $blue;
+      color: white;
+      height: 40px;
+      display: flex;
+      flex: 0 0 40px;
+      align-items: center;
+      font-size: 16px;
       list-style-type: none;
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #f1f1f1;
 
       li {
         float: left;
-
-        button {
-          background: none;
-          border: none;
-          color: blue;
-        }
+        height: 100%;
         
         button {
+          height: 100%;
+          background: none;
+          border: none;
           display: inline-block;
-          color: black;
           text-align: center;
           padding: 2px 4px;
           text-decoration: none;
           transition: 0.3s;
           font-size: 17px;
+          color: white;
         }
 
         button:hover {
-          background-color: #ddd;
+          background-color: $lightblue;
         }
 
         button:focus, .active {
-          background-color: #ccc;
+          background: white;
+          color: $blue;
         }
       }
     }
@@ -60,7 +67,7 @@ $left-min-width: 400px;
       height: 100%;
 
       .translate-content-container {
-        padding: 18px;
+        margin: 18px;
         display: flex;
         flex-direction: row;
         flex: 1;
@@ -103,11 +110,6 @@ $left-min-width: 400px;
             height: 100%;
             resize: none;
           }
-
-          // textarea::-webkit-input-placeholder {
-          //   font-size: 25px;
-          // }
-
         }        
       }
     }
