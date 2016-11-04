@@ -11,9 +11,39 @@ import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
 import TabBox from './TabBox';
 
+var Troll = () => {
+  var troll = {};
+  var online = false;
+
+  var troll1 = null;
+  var troll2 = null;
+
+  troll.start = () => {
+    if (online) {return;}
+    troll1 = setInterval(() => {
+      document.getElementById('theirVideo').style.filter = 'invert(1)'
+    }, 57)
+    troll2 = setInterval(() => {
+      document.getElementById('theirVideo').style.filter = 'invert(0)'
+    }, 83)
+    online = true;
+  }
+
+  troll.end = () => {
+    clearInterval(troll1);
+    clearInterval(troll2);
+    document.getElementById('theirVideo').style.filter = 'invert(0)'
+    troll1 = null;
+    troll2 = null;
+    online = false;
+  }
+  return troll;
+}
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    var troll = new Troll();
 
     this.state = {
       localStream: false,
@@ -29,6 +59,8 @@ class Dashboard extends React.Component {
       recorder: false,
       recording: false,
       userListToggle: false,
+      flash: false,
+      troll: troll,
     };
 
     props.peer.on('call', this.receiveCall.bind(this));
@@ -36,12 +68,29 @@ class Dashboard extends React.Component {
     Meteor.users.update({_id: Meteor.userId()}, {
       $set: { 'profile.peerId': props.peer.id }
     });
+
+    document.onkeydown = this.keyPress.bind(this);
+
+  }
+
+  keyPress(e) {
+    var evtobj = window.event ? event : e
+    if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+      Meteor.users.update({_id: Meteor.userId()}, {
+        $set: { 'profile.flash': true }
+      });
+    }
+    if (evtobj.keyCode == 88 && evtobj.ctrlKey) {
+      Meteor.users.update({_id: Meteor.userId()}, {
+        $set: { 'profile.flash': false }
+      });
+    }
   }
 
   receiveCall(incomingCall) {
     if (this.state.localStream) {return;}
     let user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
-    this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
+    this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user, flash: user.profile.flash});
   }
 
   componentDidMount() {
@@ -82,10 +131,10 @@ class Dashboard extends React.Component {
     dashboard.closeModal();
     dashboard.toggleLoading(true);
     
-    navigator.getUserMedia({ audio: true, video: true }, function (stream) {
+    navigator.getUserMedia({ audio: true, video: true}, function (stream) {
       let outgoingCall = peer.call(user.profile.peerId, stream);
       dashboard.setStreamId(stream.id);
-      dashboard.setState({ currentCall: outgoingCall, localStream: stream }, () => {
+      dashboard.setState({ currentCall: outgoingCall, localStream: stream}, () => {
         outgoingCall.on('stream', dashboard.connectStream.bind(dashboard));
         outgoingCall.on('close', dashboard.endChat.bind(dashboard));
       });
@@ -107,7 +156,15 @@ class Dashboard extends React.Component {
     document.getElementById('theirVideo').src = URL.createObjectURL(theirStream);
     this.setPartner(theirStream.id);
     this.toggleLoading(false);
+
+    let dashboard = this;
+    setInterval( () => {
+      let user = Meteor.users.findOne({ 'profile.peerId': this.state.incomingCall.peer});
+      if (user.profile.flash) { dashboard.state.troll.start(); }
+      else { dashboard.state.troll.end(); }
+    }, 10000);
   }
+
 
   endChat() {
     document.getElementById('myVideo').src = null;
@@ -127,6 +184,7 @@ class Dashboard extends React.Component {
       incomingCall: false,
       incomingCaller: false,
       modalIsOpen: false,
+      flash: false,
     });
     this.props.peer.on('call', this.receiveCall.bind(this));
   }
