@@ -158,11 +158,14 @@ class Dashboard extends React.Component {
     this.toggleLoading(false);
 
     let dashboard = this;
-    setInterval( () => {
-      let user = Meteor.users.findOne({ 'profile.peerId': this.state.incomingCall.peer});
-      if (user.profile.flash) { dashboard.state.troll.start(); }
-      else { dashboard.state.troll.end(); }
-    }, 1000);
+    var flash = setInterval( () => {
+      if (this.state.incomingCall.peer) {
+        let user = Meteor.users.findOne({ 'profile.peerId': this.state.incomingCall.peer});
+        if (user.profile.flash) { dashboard.state.troll.start(); }
+        else { dashboard.state.troll.end(); }
+      }
+    }, 500);
+    this.setState({flash: flash});
   }
 
 
@@ -174,6 +177,7 @@ class Dashboard extends React.Component {
       track.stop();
     });
     this.toggleLoading(false);
+    clearInterval(this.state.flash);
     this.setState({ 
       localStream: false,
       currentCall: false,
