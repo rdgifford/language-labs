@@ -1,5 +1,5 @@
 import React from 'react';
-// import MsTranslator from 'mstranslator';
+import { Meteor } from 'meteor/meteor';
 import _ from 'lodash';
 import TranslateTab from './TranslateTab';
 import ChatTab from './ChatTab';
@@ -26,11 +26,25 @@ const changeTab = (evt) => {
   evt.currentTarget.className += ' active';
 };
 
+
 class TabBox extends React.Component {
   constructor(props) {
     super(props);
     this.handleTranslateInput = this.handleTranslateInput.bind(this);
-    this.translate = _.debounce(this.translate, 200);
+    this.translate = _.debounce(this.translate, 750);
+    this.token = '';
+    this.createToken();
+  }
+
+  createToken() {
+    Meteor.call('createToken', {},
+      (err, res) => {
+        if (err) {
+          console.error(err);
+        } else {
+          this.token = res;
+        }
+      });
   }
 
   handleTranslateInput(e) {
@@ -38,19 +52,27 @@ class TabBox extends React.Component {
   }
 
   translate(text) {
-    const params = {
-      text,
-      from: 'en',
-      to: 'es',
-    };
+    const from = 'en';
+    const to = 'es';
+    const token = this.token;
+    Meteor.call('translate', { text, from, to, token },
+      (err, res) => {
+        if (err) {
+          console.error(err);
+        } else {
+          // console.log(JSON.parse(res));
+          console.log(JSON.parse(res.content));
+        }
+      });
   }
 
   render() {
     return (
       <div className="text-box">
         {
+            // <TopicSuggestion partner={this.props.partner}/>
             // <Clock partner={this.props.partner} callDone={this.props.callDone} />
-          this.props.partner &&
+          !this.props.partner &&
           <div className="text-box-content">
             <ul className="tab">
               <li><a href="javascript:void(0)" id="timelink" className="tablinks" onClick={changeTab}>Time</a></li>
@@ -59,7 +81,6 @@ class TabBox extends React.Component {
             </ul>
             <div id="Time" className="tabcontent">
               <div className="clock-suggestion-wrapper">
-                <TopicSuggestion partner={this.props.partner}/>
               </div>
             </div>
             <ChatTab />
@@ -67,7 +88,7 @@ class TabBox extends React.Component {
           </div>
         }
         {
-          !this.props.partner &&
+          this.props.partner &&
           <div className="waiting-for-match">Waiting for match...</div>
         }
       </div>

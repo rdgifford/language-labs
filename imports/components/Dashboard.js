@@ -44,8 +44,14 @@ class Dashboard extends React.Component {
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user});
   }
 
+  componentDidMount() {
+    if (!this.state.partner) {
+      document.getElementById('timelink').click();
+    }
+  }
+
   componentDidUpdate() {
-    if (this.state.partner) {
+    if (!this.state.partner) {
       document.getElementById('timelink').click();
     }
   }

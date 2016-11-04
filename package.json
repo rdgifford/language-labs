@@ -9,14 +9,13 @@
     "eslint": "^3.9.1",
     "lodash": "^4.16.6",
     "meteor-node-stubs": "~0.2.0",
-    "mstranslator": "^2.0.8",
+    "mstranslator": "^2.1.0",
     "react": "^15.3.2",
     "react-addons-pure-render-mixin": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-edit-inline": "^1.0.7",
     "react-meteor-data": "^0.2.9",
-    "react-modal": "^1.5.2",
-    "react-meteor-data": "^0.2.9"
+    "react-modal": "^1.5.2"
   },
   "devDependencies": {
     "eslint": "^3.9.1",
