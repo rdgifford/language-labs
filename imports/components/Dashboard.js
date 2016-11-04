@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
+import React             from 'react';
+import AWS               from 'aws-sdk';
+import { Meteor }        from 'meteor/meteor';
 import AccountsUIWrapper from './accounts';
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
@@ -9,7 +9,29 @@ import TopicSuggestion   from './TopicSuggestion';
 import VideoBox          from './VideoBox';
 import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
-import TabBox from './TabBox';
+import TabBox            from './TabBox';
+import Review            from './Review';
+import Waiting           from './Waiting';
+import Welcome           from './Welcome';
+import UserList          from './UserList';
+import Modal             from 'react-modal';
+import Toggle            from './Toggle';
+import Popup             from 'react-popup';
+import _                 from 'lodash';
+
+const uploader = new Slingshot.Upload('uploadToAmazonS3');
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : '20%',
+    bottom                : 'auto',
+    transform             : 'translate(-50%, -50%)',
+    background            : '#5fa9d9',
+    color                 : '#fff',
+  }
+};
 
 var Troll = () => {
   var troll = {};
@@ -62,7 +84,7 @@ class Dashboard extends React.Component {
       flash: false,
       troll: troll,
     };
-
+    this.blobSize = 1 * 1024 * 1024;
     props.peer.on('call', this.receiveCall.bind(this));
 
     Meteor.users.update({_id: Meteor.userId()}, {
@@ -191,22 +213,71 @@ class Dashboard extends React.Component {
       flash: false,
     });
     this.props.peer.on('call', this.receiveCall.bind(this));
-  }
+  };
+  
+  // get input from user for recording name
+  createVideoArr() {
+    console.log('record pressed')   
+    Popup.prompt('Name your recording', 'What are you recording?', {
+      placeholder: 'Recording name',
+      type: 'text'
+    }, {
+      text: 'Save',
+      className: 'success',
+      action: (Box) => {
+        this.startRecording(Box.value);
+        Box.close();
+      }
+    });
+  };
 
-  startRecording() {
+  startRecording(videoTitle) {
+    let videoPath = 'profile.videos.' + videoTitle;
+    console.log('start recording');
     navigator.mediaDevices.getUserMedia({ audio: true, video: true})
-      .then((videoStream) => {
-        recorder = new MediaRecorder(videoStream);
+      .then((_stream) => {
+        let blobPacket = {
+          size: 0,
+          blobs: [],
+        };
+        let theirVideo = this.refs.theirVideo;
+        recorder = new MediaRecorder(_stream);
         console.log('recording', recorder.state);
         this.setState({
           recorder: recorder,
           recording: true,
         })
         console.log(!this.state.currentCall, this.state.recording);
+        theirVideo.src = URL.createObjectURL(_stream);
         recorder.start();
 
+        // let videos = Meteor.user().profile.videos || {};
+        // videos[videoTitle] = [];
+        // Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.videos': videos}});
+
+        let uploadBlob = (blobArray) => {
+          uploader.send(new Blob(blobArray), (error, downloadUrl) => {
+            if (error) {
+              console.error('Error uploading', uploader.xhr.response);
+            } else {
+              console.log('download url', downloadUrl);
+              Meteor.users.update(
+                { _id: Meteor.userId() },
+                { $push: { videoPath: downloadUrl } }
+              )
+            }
+          })
+        }
+
         recorder.ondataavailable = (e) => {
-          console.log(e.data);
+          blobPacket.blobs.push(e.data);
+          blobPacket.size += e.data.size;
+          if(blobPacket.size >= this.blobSize) {
+            console.log('uploaded data', blobPacket.blobs, blobPacket.size);
+            uploadBlob(blobPacket.blobs.slice())
+            blobPacket.blobs = [];
+            blobPacket.size = 0;
+          }
         }
 
         recorder.onstop = (e) => {
@@ -215,6 +286,7 @@ class Dashboard extends React.Component {
             recording: false,
           });
           recorder.stream.getTracks().forEach(track => {track.stop()});
+          this.refs.theirVideo.src = null;
         }
       })
   }
@@ -258,6 +330,9 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className='dashboard'>
+      <div id='popupContainer'>
+      <Popup className="mm-popup"/>
+      </div>
         <div className='top'>
           <VideoBox 
             callDone={this.state.callDone}
@@ -293,7 +368,7 @@ class Dashboard extends React.Component {
             currentCall={this.state.currentCall}
             recording={this.state.recording}
             stopRecording={this.stopRecording.bind(this)}
-            startRecording={this.startRecording.bind(this)}
+            startRecording={this.createVideoArr.bind(this)}
             endChat={this.endChat.bind(this)}
           />
         </div>
