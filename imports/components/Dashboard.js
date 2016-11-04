@@ -18,6 +18,7 @@ import Modal             from 'react-modal';
 import Toggle            from './Toggle';
 import Popup             from 'react-popup';
 import _                 from 'lodash';
+import Videos            from '../collections.js';
 const uploader = new Slingshot.Upload('uploadToAmazonS3');
 
 const customStyles = {
