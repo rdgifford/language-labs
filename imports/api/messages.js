@@ -1,1 +1,10 @@
-export const Messages = new Mongo.Collection('messages');
+const Messages = new Mongo.Collection('messages');
+
+Messages.allow({
+  insert: function (userId, doc) {
+         return true;
+      },
+});
+
+export { Messages };
+
