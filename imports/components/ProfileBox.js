@@ -23,6 +23,7 @@ const showVideo = (videos, user) => {
 	for (var key in userVideos) {
 		result.push([key, userVideos[key]]);
 	}
+	console.log(result);
 	return result;
 }
 

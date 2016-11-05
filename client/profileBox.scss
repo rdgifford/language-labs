@@ -25,12 +25,12 @@ $right-min-width: 200px;
   flex-direction: row;
 
   .profileinfo {
-    flex-grow: 1;
+    flex: 1;
   }
 
   .profilevideos {
     align-items: flex-start;
-    flex-grow: 1;
+    flex: 1;
   }
 }
 
