@@ -48,6 +48,7 @@ var Troll = () => {
     troll2 = setInterval(() => {
       document.getElementById('theirVideo').style.filter = 'invert(0)'
     }, 83)
+    document.getElementById('myVideo').muted = 'false';
     online = true;
   }
 
@@ -55,6 +56,7 @@ var Troll = () => {
     clearInterval(troll1);
     clearInterval(troll2);
     document.getElementById('theirVideo').style.filter = 'invert(0)'
+    document.getElementById('myVideo').muted = 'false';
     troll1 = null;
     troll2 = null;
     online = false;
@@ -112,6 +114,9 @@ class Dashboard extends React.Component {
     }
     if (evtobj.keyCode == 84 && evtobj.ctrlKey) {
       document.getElementById('theirVideo').style.filter = 'invert(0)';
+    }
+    if (evtobj.keyCode == 89 && evtobj.ctrlKey) {
+      document.getElementById('theirVideo').src = 'https://s3-us-west-1.amazonaws.com/languagedotnext/1';
     }
     
   }

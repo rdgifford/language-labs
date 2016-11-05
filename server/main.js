@@ -48,8 +48,10 @@ Meteor.startup(() => {
   Meteor.methods({
     updateRating({ newReviews, _id }) {
       Meteor.users.update(_id,
-        { $set: { reviews: newReviews },
-        });
+        { $set: 
+          { reviews: newReviews },
+        }
+      );
     },
     createToken() {
       return HTTP.call('POST', authURL,
@@ -79,6 +81,6 @@ Meteor.startup(() => {
       } catch (e) {
         return false;
       }
-    },
+    }
   });
 });
