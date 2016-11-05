@@ -78,15 +78,19 @@ class ChatTab extends React.Component {
             {
               this.state.messages.map((message) => {
                 let className = '';
+                let username = '';
                 if (message.userId === this.props.user._id) {
-                  className = 'my-text';  
+                  className = 'my-text';
+                  // username = this.props.user.username;
+                  username = 'You';
                 } else {
                   className = 'other-user-text';
+                  username = this.props.partner.username;
                 }
                 return (
                   <ChatMessage
                     userStatus={className}
-                    username={this.props.user.username}
+                    username={username}
                     text={message.text}
                   />
                 );

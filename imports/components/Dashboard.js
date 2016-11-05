@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     var troll = new Troll();
-
+    const user = Meteor.users.findOne({_id: Meteor.userId()});
     this.state = {
       localStream: false,
       currentCall: false,
@@ -83,16 +83,15 @@ class Dashboard extends React.Component {
       userListToggle: false,
       flash: false,
       troll: troll,
+      user,
     };
     this.blobSize = 1 * 1024 * 1024;
     props.peer.on('call', this.receiveCall.bind(this));
-
     Meteor.users.update({_id: Meteor.userId()}, {
       $set: { 'profile.peerId': props.peer.id }
     });
 
     document.onkeydown = this.keyPress.bind(this);
-
   }
 
   keyPress(e) {
@@ -113,18 +112,6 @@ class Dashboard extends React.Component {
     if (this.state.localStream) {return;}
     let user = Meteor.users.findOne({ 'profile.peerId': incomingCall.peer});
     this.setState({ gotCall: true, incomingCall: incomingCall, incomingCaller: user, flash: user.profile.flash});
-  }
-
-  componentDidMount() {
-    if (!this.state.partner) {
-      document.getElementById('timelink').click();
-    }
-  }
-
-  componentDidUpdate() {
-    if (!this.state.partner) {
-      document.getElementById('timelink').click();
-    }
   }
 
   declineCall() {
@@ -356,7 +343,7 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <TabBox
-            user={this.state.showUser}
+            user={this.state.user}
             partner={this.state.partner}
             callDone={this.state.callDone}
           />

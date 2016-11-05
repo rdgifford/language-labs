@@ -22,6 +22,12 @@ const changeTab = (evt) => {
 };
 
 class TabBox extends React.Component {
+  componentDidUpdate() {
+    if (this.props.partner) {
+      document.getElementById('chatlink').click();
+    }
+  }
+
   render() {
     return (
       <div className="text-box">
@@ -31,19 +37,13 @@ class TabBox extends React.Component {
           this.props.partner &&
           <div className="text-box-content">
             <ul className="tab">
-              <li><button id="timelink" className="tablinks" onClick={changeTab}>
-                Time
-              </button></li>
-              <li><button className="tablinks" onClick={changeTab}>
+              <li><button id="chatlink" className="tablinks" onClick={changeTab}>
                 Chat
               </button></li>
               <li><button className="tablinks" onClick={changeTab}>
                 Translate
               </button></li>
             </ul>
-            <div id="Time" className="tabcontent">
-              <div className="clock-suggestion-wrapper" />
-            </div>
             <ChatTab
               user={this.props.user}
               partner={this.props.partner}
