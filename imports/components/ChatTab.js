@@ -56,7 +56,9 @@ class ChatTab extends React.Component {
     const messages = yourMessages.concat(theirMessages);
     messages.sort((a, b) => (a.date - b.date));
 
-    this.setState({ messages });
+    if (messages.length > this.state.messages.length) {
+      this.setState({ messages });
+    }
 
     this.renderId = Meteor.setTimeout(this.renderMessages.bind(this), 1000);
   }
