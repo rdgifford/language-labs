@@ -19,11 +19,12 @@ const customStyles = {
 
 const showVideo = (videos, user) => {
 	let result = [];
-	let userVideos = videos.findOne({userId: user._id}).videos;
-	for (var key in userVideos) {
-		result.push([key, userVideos[key]]);
+	if (videos.findOne({userId: user._id})) {
+		let userVideos = videos.findOne({userId: user._id}).videos;
+		for (var key in userVideos) {
+			result.push([key, userVideos[key]]);
+		}
 	}
-	console.log(result);
 	return result;
 }
 
@@ -50,7 +51,6 @@ const ProfileBox = ({switchToggle, userListToggle, user, onlineUsers, openModal,
 		      <div><p>Want to Learn: {showUser.profile.learning}</p></div>
 		      <div><p>Interests: {showUser.profile.interests}</p></div>
 		      <div><p>Location: {showUser.profile.location}</p></div>
-		      
 	      </div>
 	     	<div className='profilevideos'>
 	     		<p>Videos: </p>

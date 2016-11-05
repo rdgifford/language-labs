@@ -70,8 +70,6 @@ class Dashboard extends React.Component {
     var troll = new Troll();
     const user = Meteor.users.findOne({_id: Meteor.userId()});
 
-    console.log(Videos);
-
     this.state = {
       localStream: false,
       currentCall: false,

@@ -38,7 +38,7 @@ const ButtonBox = ({gotCall, user, incomingCaller, acceptCall, declineCall, curr
       }
       {!currentCall && recording && !gotCall &&
         <button onClick={stopRecording}>
-          Stop Recording
+          Stop
         </button>
       }
     </div>
