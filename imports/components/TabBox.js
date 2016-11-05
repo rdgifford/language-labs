@@ -28,7 +28,7 @@ class TabBox extends React.Component {
         {
             // <TopicSuggestion partner={this.props.partner}/>
             // <Clock partner={this.props.partner} callDone={this.props.callDone} />
-          !this.props.partner &&
+          this.props.partner &&
           <div className="text-box-content">
             <ul className="tab">
               <li><button id="timelink" className="tablinks" onClick={changeTab}>
@@ -52,7 +52,7 @@ class TabBox extends React.Component {
           </div>
         }
         {
-          this.props.partner &&
+          !this.props.partner &&
           <div className="waiting-for-match">Waiting for match...</div>
         }
       </div>

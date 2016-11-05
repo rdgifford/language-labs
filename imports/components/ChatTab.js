@@ -10,6 +10,7 @@ class ChatTab extends React.Component {
     this.state = {
       messages: [],
     };
+    // this.renderMessages();
   }
 
   componentDidMount() {
@@ -26,26 +27,28 @@ class ChatTab extends React.Component {
     const text = e.currentTarget.children[0].value;
     e.currentTarget.children[0].value = '';
     if (text !== '') {
-      const fakePartner = {
-        _id: '123124124',
-        username: 'cheny151',
-      };
-      const partnerId = fakePartner._id;
+      // const fakePartner = {
+      //   _id: '123124124',
+      //   username: 'cheny151',
+      // };
+      // const partnerId = fakePartner._id;
+      const partnerId = this.props.partner._id;
       const userId = this.props.user._id;
       const date = new Date();
       const message = { text, userId, partnerId, date };
       Messages.insert(message);
-      this.renderMessages();
+      // this.renderMessages();
     }
   }
 
   renderMessages() {
     const userId = this.props.user._id;
-    const fakePartner = {
-      _id: '123124124',
-      username: 'cheny151',
-    };
-    const partnerId = fakePartner._id;
+    // const fakePartner = {
+    //   _id: '123124124',
+    //   username: 'cheny151',
+    // };
+    // const partnerId = fakePartner._id;
+    const partnerId = this.props.partner._id;
     const yourMessages = Messages.find({
       userId,
       partnerId,
@@ -58,6 +61,8 @@ class ChatTab extends React.Component {
     messages.sort((a, b) => (a.date - b.date));
 
     this.setState({ messages });
+
+    Meteor.setTimeout(this.renderMessages.bind(this), 1000);
   }
 
             // <ChatMessage userStatus={'other-user-text'} />
