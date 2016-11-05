@@ -32,7 +32,8 @@ class ChatTab extends React.Component {
       };
       const partnerId = fakePartner._id;
       const userId = this.props.user._id;
-      const message = { text, userId, partnerId };
+      const date = new Date();
+      const message = { text, userId, partnerId, date };
       Messages.insert(message);
       this.renderMessages();
     }
@@ -40,8 +41,22 @@ class ChatTab extends React.Component {
 
   renderMessages() {
     const userId = this.props.user._id;
-    const messages = Messages.find({ userId }).fetch();
-    console.log(messages);
+    const fakePartner = {
+      _id: '123124124',
+      username: 'cheny151',
+    };
+    const partnerId = fakePartner._id;
+    const yourMessages = Messages.find({
+      userId,
+      partnerId,
+    }).fetch();
+    const theirMessages = Messages.find({
+      userId: partnerId,
+      partnerId: userId,
+    }).fetch();
+    const messages = yourMessages.concat(theirMessages);
+    messages.sort((a, b) => (a.date - b.date));
+
     this.setState({ messages });
   }
 
