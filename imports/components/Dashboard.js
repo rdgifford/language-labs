@@ -235,9 +235,6 @@ class Dashboard extends React.Component {
         // prevents screeching from audio feedback
         _stream.getAudioTracks()[0].enabled = false;
 
-        // let videos = Meteor.user().profile.videos || {};
-        // videos[videoTitle] = [];
-        // Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.videos': videos}});
         if (Videos.findOne({ userId: Meteor.userId() }) === undefined) {
           console.log('Created Videos property', Videos.findOne({ userId: Meteor.userId() }));
           Videos.insert({ userId: Meteor.userId(), videos: {} });

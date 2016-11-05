@@ -6,7 +6,6 @@ import { Messages } from '../imports/messages';
 
 const authURL = 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13';
 const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
-let counter = 0;
 
 Meteor.startup(() => {
   Slingshot.fileRestrictions('uploadToAmazonS3', {
@@ -24,7 +23,10 @@ Meteor.startup(() => {
     bucket: 'languagedotnext',
     acl: 'public-read',
     key: () => {
-      return String(++counter);
+      let counter = Videos.findOne({userId: 'counter'}).counter;
+      counter++;
+      Videos.update({userId: 'counter'}, {$set: {'counter': counter}});
+      return String(counter);
     },
   });
 
@@ -35,6 +37,9 @@ Meteor.startup(() => {
   Meteor.publish('users', () => Meteor.users.find({}));
 
   Meteor.publish('videos', function() {
+    if (Videos.findOne({userId: 'counter'}) === undefined){
+      Videos.insert({userId: 'counter', counter: 0});
+    }
     return Videos.find({});
   });
 
