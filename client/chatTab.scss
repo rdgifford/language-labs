@@ -1,6 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Quicksand:300,400,700);
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
 
+$lighter-blue: #9FCBE8;
 $blue: #5fa9d9;
 $gray: rgba(0,0,0,.6);
 $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
@@ -33,6 +34,20 @@ $shadow: 10px 10px 8px -10px rgba(0,0,0,0.4);
         }
         input[type="submit"] {
           flex: 1;
+          cursor: pointer;
+          font-family: 'quicksand';
+          color: white;
+          background: $blue;
+          border: none;
+          border: 2px solid $blue;
+          transition: all .3s;
+          border-bottom-right-radius: 4px;
+
+          &:hover {
+            background: $lighter-blue;
+            color: white;
+            border: 2px solid $lighter-blue;
+          }
         }         
       }
     }

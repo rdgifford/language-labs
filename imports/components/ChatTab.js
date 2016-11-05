@@ -10,16 +10,23 @@ class ChatTab extends React.Component {
     this.state = {
       messages: [],
     };
-    // this.renderMessages();
+    this.renderId = null;
   }
 
   componentDidMount() {
     this.renderMessages();
   }
 
+
   componentDidUpdate() {
     const objDiv = document.getElementById('chatbox-messages');
     objDiv.scrollTop = objDiv.scrollHeight;
+  }
+
+  componentWillUnmount() {
+    if (this.renderId !== null) {
+      Meteor.clearTimeout(this.renderId);    
+    }
   }
 
   submitHandler(e) {
@@ -27,27 +34,16 @@ class ChatTab extends React.Component {
     const text = e.currentTarget.children[0].value;
     e.currentTarget.children[0].value = '';
     if (text !== '') {
-      // const fakePartner = {
-      //   _id: '123124124',
-      //   username: 'cheny151',
-      // };
-      // const partnerId = fakePartner._id;
       const partnerId = this.props.partner._id;
       const userId = this.props.user._id;
       const date = new Date();
       const message = { text, userId, partnerId, date };
       Messages.insert(message);
-      // this.renderMessages();
     }
   }
 
   renderMessages() {
     const userId = this.props.user._id;
-    // const fakePartner = {
-    //   _id: '123124124',
-    //   username: 'cheny151',
-    // };
-    // const partnerId = fakePartner._id;
     const partnerId = this.props.partner._id;
     const yourMessages = Messages.find({
       userId,
@@ -62,14 +58,9 @@ class ChatTab extends React.Component {
 
     this.setState({ messages });
 
-    Meteor.setTimeout(this.renderMessages.bind(this), 1000);
+    this.renderId = Meteor.setTimeout(this.renderMessages.bind(this), 1000);
   }
 
-            // <ChatMessage userStatus={'other-user-text'} />
-            // <ChatMessage userStatus={'my-text'} />
-            // <ChatMessage userStatus={'my-text'} />
-            // <ChatMessage userStatus={'other-user-text'} />
-            // <ChatMessage userStatus={'my-text'} />
   render() {
     return (
       <div id="Chat" className="chatbox-container tabcontent">
@@ -100,7 +91,7 @@ class ChatTab extends React.Component {
           <div className="chatbox-form">
             <form action="" onSubmit={this.submitHandler}>
               <input type="text" />
-              <input type="submit" />
+              <input type="submit" value="Send" />
             </form>
           </div>
         </div>
