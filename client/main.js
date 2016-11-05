@@ -7,6 +7,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import '../imports/accountsConfig.js';
 import './styles.scss';
 import { Videos }          from '../imports/collections.js';
+import { Messages }          from '../imports/messages';
+
 /* ------------------------- PEER.JS INIT ------------------------- */
 const peer = new Peer({
   key: 'zzak1w02wffuhaor',
@@ -25,25 +27,24 @@ navigator.getUserMedia =
 /* -------------------------- PEER.JS END -------------------------- */
 
 const AppContainer = createContainer(() => {
-
   const presencesSub = Meteor.subscribe('presences');
-  const usersSub     = Meteor.subscribe('users');
-  const videosSub    = Meteor.subscribe('videos');
+  const usersSub = Meteor.subscribe('users');
+  const messagesSub = Meteor.subscribe('messages');
+  const videosSub = Meteor.subscribe('videos');
   // we only want videos of users, add later
-  const videos       = Videos.find().fetch();  
-  const user         = Meteor.users.findOne(Meteor.userId());
-  const userIds      = Meteor.presences.find().map(presence => presence.userId);
-  const loading      = !usersSub.ready() && !presencesSub.ready() && !videosSub.ready();
-  
-  const onlineUsers  = Meteor.users.find({ 
-    $and: [ 
-      // { 'profile.language': { $exists: true } },  
-      { _id: { $in: userIds, $ne: Meteor.userId() } }
-    ] 
+  const videos = Videos.find().fetch();
+  const user = Meteor.users.findOne(Meteor.userId());
+  const userIds = Meteor.presences.find().map(presence => presence.userId);
+  const loading = !usersSub.ready() && !presencesSub.ready() &&
+                  !videosSub.ready() && !messagesSub.ready();
+
+  const onlineUsers = Meteor.users.find({
+    $and: [
+      // { 'profile.language': { $exists: true } },
+      { _id: { $in: userIds, $ne: Meteor.userId() } },
+    ],
   }).fetch();
-
   return { onlineUsers, user, loading, peer, videos };
-
 }, App);
 
 

@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import keys from '../config/config';
 import { Videos } from '../imports/collections.js';
+import { Messages } from '../imports/messages';
 
 const authURL = 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13';
 const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
@@ -34,8 +35,8 @@ Meteor.startup(() => {
   Meteor.publish('videos', function() {
     return Videos.find({});
   });
-  
-  Meteor.publish('messages', () => Meteor.messages.find({}));
+
+  Meteor.publish('messages', () => Messages.find({}));
 
   Meteor.methods({
     updateRating({ newReviews, _id }) {
