@@ -1,4 +1,5 @@
 import React             from 'react';
+import ReactDom          from 'react-dom';
 import AWS               from 'aws-sdk';
 import { Meteor }        from 'meteor/meteor';
 import AccountsUIWrapper from './accounts';
@@ -9,6 +10,7 @@ import TopicSuggestion   from './TopicSuggestion';
 import VideoBox          from './VideoBox';
 import ButtonBox         from './ButtonBox';
 import ProfileBox        from './ProfileBox';
+import RecordModal       from './RecordModal';
 import TabBox            from './TabBox';
 import Review            from './Review';
 import Waiting           from './Waiting';
@@ -82,6 +84,7 @@ class Dashboard extends React.Component {
       modalIsOpen: false,
       recorder: false,
       recording: false,
+      recordModalIsOpen: false,
       userListToggle: false,
       flash: false,
       showUser: props.user,
@@ -214,20 +217,6 @@ class Dashboard extends React.Component {
     });
     this.props.peer.on('call', this.receiveCall.bind(this));
   }  
-  // get input from user for recording name
-  createVideoArr() {
-    Popup.prompt('Name your recording', 'What are you recording?', {
-      placeholder: 'Recording name',
-      type: 'text',
-    }, {
-      text: 'Save',
-      className: 'success',
-      action: (Box) => {
-        this.startRecording(Box.value);
-        Box.close();
-      },
-    });
-  }
 
   playVideo(url) {
     if (this.state.localStream) {return;}
@@ -317,6 +306,10 @@ class Dashboard extends React.Component {
     });
   }
 
+  toggleRecordModal() {
+    this.setState({ recordModalIsOpen: !this.state.recordModalIsOpen })
+  }
+
   openModal(user) {
     this.setState({ modalIsOpen: true, showUser: user })
   }
@@ -328,9 +321,6 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className='dashboard'>
-      <div id='popupContainer'>
-      <Popup className="mm-popup"/>
-      </div>
         <div className='top'>
           <VideoBox 
             callDone={this.state.callDone}
@@ -353,6 +343,14 @@ class Dashboard extends React.Component {
             videos={this.state.videos}
             playVideo={this.playVideo.bind(this)}
           />
+          <RecordModal
+            recordModalIsOpen={this.state.recordModalIsOpen}
+            toggleRecordModal={this.toggleRecordModal.bind(this)}
+            startRecording={this.startRecording.bind(this)}
+          />
+          <div id='popupContainer'>
+            <Popup />
+          </div>
         </div>
         <div className='bottom'>
           <TabBox
@@ -369,7 +367,7 @@ class Dashboard extends React.Component {
             currentCall={this.state.currentCall}
             recording={this.state.recording}
             stopRecording={this.stopRecording.bind(this)}
-            startRecording={this.createVideoArr.bind(this)}
+            startRecording={this.toggleRecordModal.bind(this)}
             endChat={this.endChat.bind(this)}
           />
         </div>
