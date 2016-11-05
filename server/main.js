@@ -34,6 +34,8 @@ Meteor.startup(() => {
   Meteor.publish('videos', function() {
     return Videos.find({});
   });
+  
+  Meteor.publish('messages', () => Meteor.messages.find({}));
 
   Meteor.methods({
     updateRating({ newReviews, _id }) {

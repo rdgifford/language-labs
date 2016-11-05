@@ -4,12 +4,29 @@ import ChatMessage from './ChatMessage';
 
 
 class ChatTab extends React.Component {
+  constructor(props) {
+    super(props);
+    this.submitHandler = this.submitHandler.bind(this);
+  }
+
   submitHandler(e) {
     e.preventDefault();
-    // const text = e.currentTarget.children[0].textContent;
-    e.currentTarget.children[0].textContent = '';
-    // if (text !== '') {
-    // }
+    const text = e.currentTarget.children[0].value;
+    e.currentTarget.children[0].value = '';
+    if (text !== '') {
+      const fakePartner = {
+        _id: '123124124',
+        username: 'cheny151',
+      };
+      const partnerId = fakePartner._id;
+      const userId = this.props.user._id;
+      const message = { text, userId, partnerId };
+      // console.log('user', Meteor.users);
+      // console.log('messages', Meteor.messages);
+      
+      // Meteor.messages.insert(message);
+      // console.log(Meteor.messages.find({ userId }));
+    }
   }
 
   render() {

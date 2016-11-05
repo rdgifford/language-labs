@@ -356,6 +356,7 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <TabBox
+            user={this.state.showUser}
             partner={this.state.partner}
             callDone={this.state.callDone}
           />

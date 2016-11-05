@@ -44,7 +44,10 @@ class TabBox extends React.Component {
             <div id="Time" className="tabcontent">
               <div className="clock-suggestion-wrapper" />
             </div>
-            <ChatTab />
+            <ChatTab
+              user={this.props.user}
+              partner={this.props.partner}
+            />
             <TranslateTab />
           </div>
         }
