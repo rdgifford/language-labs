@@ -67,6 +67,7 @@ class Dashboard extends React.Component {
     super(props);
     var troll = new Troll();
     const user = Meteor.users.findOne({_id: Meteor.userId()});
+
     this.state = {
       localStream: false,
       currentCall: false,
@@ -177,7 +178,6 @@ class Dashboard extends React.Component {
     this.setState({flash: flash});
   }
 
-
   endChat() {
     document.getElementById('myVideo').src = null;
     document.getElementById('theirVideo').src = null;
@@ -204,7 +204,6 @@ class Dashboard extends React.Component {
   
   // get input from user for recording name
   createVideoArr() {
-    console.log('record pressed')   
     Popup.prompt('Name your recording', 'What are you recording?', {
       placeholder: 'Recording name',
       type: 'text'
@@ -227,7 +226,7 @@ class Dashboard extends React.Component {
           size: 0,
           blobs: [],
         };
-        let theirVideo = this.refs.theirVideo;
+        let theirVideo = document.getElementById('theirVideo');
         recorder = new MediaRecorder(_stream);
         console.log('recording', recorder.state);
         this.setState({
@@ -237,6 +236,8 @@ class Dashboard extends React.Component {
         console.log(!this.state.currentCall, this.state.recording);
         theirVideo.src = URL.createObjectURL(_stream);
         recorder.start();
+        // prevents screeching from audio feedback
+        _stream.getAudioTracks()[0].enabled = false;
 
         // let videos = Meteor.user().profile.videos || {};
         // videos[videoTitle] = [];
@@ -248,32 +249,37 @@ class Dashboard extends React.Component {
               console.error('Error uploading', uploader.xhr.response);
             } else {
               console.log('download url', downloadUrl);
-              Meteor.users.update(
-                { _id: Meteor.userId() },
-                { $push: { videoPath: downloadUrl } }
-              )
+              let video = {}
+              video[videoTitle] = downloadUrl;
+              video.userId = Meteor.userId();
+              Videos.insert(video);
+              // Meteor.users.update(
+              //   { _id: Meteor.userId() },
+              //   { $push: { videoPath: downloadUrl } }
+              // )
             }
           })
         }
 
         recorder.ondataavailable = (e) => {
           blobPacket.blobs.push(e.data);
-          blobPacket.size += e.data.size;
-          if(blobPacket.size >= this.blobSize) {
-            console.log('uploaded data', blobPacket.blobs, blobPacket.size);
-            uploadBlob(blobPacket.blobs.slice())
-            blobPacket.blobs = [];
-            blobPacket.size = 0;
-          }
+          // blobPacket.size += e.data.size;
+          // if(blobPacket.size >= this.blobSize) {
+          //   console.log('uploaded data', blobPacket.blobs, blobPacket.size);
+          //   uploadBlob(blobPacket.blobs.slice())
+          //   blobPacket.blobs = [];
+          //   blobPacket.size = 0;
+          // }
         }
 
         recorder.onstop = (e) => {
+          uploadBlob(blobPacket.blobs.slice());
           console.log('onstop event', e);
           this.setState({
             recording: false,
           });
           recorder.stream.getTracks().forEach(track => {track.stop()});
-          this.refs.theirVideo.src = null;
+          document.getElementById('theirVideo').src = null;
         }
       })
   }

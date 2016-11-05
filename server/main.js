@@ -9,22 +9,24 @@ const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
 let counter = 0;
 
 Meteor.startup(() => {
-  // Slingshot.fileRestrictions('uploadToAmazonS3', {
-  //   allowedFileTypes: null,
-  //   maxSize: 10 * 1024 * 1024,
-  // });
+  Slingshot.fileRestrictions('uploadToAmazonS3', {
+    allowedFileTypes: null,
+    maxSize: 10 * 1024 * 1024,
+  });
 
-  // Slingshot.createDirective('uploadToAmazonS3', Slingshot.S3Storage, {
-  //   region: 'us-west-1',
-  //   authorize: () => {
-  //     return true;
-  //   },
-  //   bucket: 'languagedotnext',
-  //   acl: 'public-read',
-  //   key: () => {
-  //     return String(++counter);
-  //   },
-  // });
+  Slingshot.createDirective('uploadToAmazonS3', Slingshot.S3Storage, {
+    AWSAccessKeyId: keys.AWSAccessKeyId,
+    AWSSecretAccessKey: keys.AWSSecretAccessKey,
+    region: 'us-west-1',
+    authorize: () => {
+      return true;
+    },
+    bucket: 'languagedotnext',
+    acl: 'public-read',
+    key: () => {
+      return String(++counter);
+    },
+  });
 
   Meteor.publish('presences', () => {
     return Presences.find({}, { userId: true });
