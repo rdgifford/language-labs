@@ -18,7 +18,7 @@ import Modal             from 'react-modal';
 import Toggle            from './Toggle';
 import Popup             from 'react-popup';
 import _                 from 'lodash';
-import Videos            from '../collections.js';
+import { Videos }            from '../collections.js';
 const uploader = new Slingshot.Upload('uploadToAmazonS3');
 
 const customStyles = {
@@ -200,32 +200,28 @@ class Dashboard extends React.Component {
       flash: false,
     });
     this.props.peer.on('call', this.receiveCall.bind(this));
-  };
-  
+  }  
   // get input from user for recording name
   createVideoArr() {
     Popup.prompt('Name your recording', 'What are you recording?', {
       placeholder: 'Recording name',
-      type: 'text'
+      type: 'text',
     }, {
       text: 'Save',
       className: 'success',
       action: (Box) => {
         this.startRecording(Box.value);
         Box.close();
-      }
+      },
     });
-  };
+  }
 
   startRecording(videoTitle) {
     let videoPath = 'profile.videos.' + videoTitle;
     console.log('start recording');
     navigator.mediaDevices.getUserMedia({ audio: true, video: true})
       .then((_stream) => {
-        let blobPacket = {
-          size: 0,
-          blobs: [],
-        };
+        let blobPacket = [];
         let theirVideo = document.getElementById('theirVideo');
         recorder = new MediaRecorder(_stream);
         console.log('recording', recorder.state);
@@ -242,38 +238,38 @@ class Dashboard extends React.Component {
         // let videos = Meteor.user().profile.videos || {};
         // videos[videoTitle] = [];
         // Meteor.users.update({_id: Meteor.userId()}, {$set: {'profile.videos': videos}});
+        if (Videos.findOne({ userId: Meteor.userId() }) === undefined) {
+          console.log('Created Videos property', Videos.findOne({ userId: Meteor.userId() }));
+          Videos.insert({ userId: Meteor.userId(), videos: {} });
+        }
 
         let uploadBlob = (blobArray) => {
+
           uploader.send(new Blob(blobArray), (error, downloadUrl) => {
             if (error) {
               console.error('Error uploading', uploader.xhr.response);
             } else {
-              console.log('download url', downloadUrl);
-              // Meteor.users.update(
-              //   { _id: Meteor.userId() },
-              //   { $push: { videoPath: downloadUrl } }
-              // )
+              // console.log('download url', downloadUrl);
+              let vidObj = Videos.findOne({userId: Meteor.userId()});
+              // console.log('Vids:', vidObj);
+              vidObj.videos[videoTitle] = downloadUrl;
+              Videos.update({_id: vidObj['_id']}, {$set: {'videos': vidObj.videos}});
+              // console.log(Videos.findOne({userId: Meteor.userId()}));
             }
           })
-        }
+        };
 
         recorder.ondataavailable = (e) => {
-          blobPacket.blobs.push(e.data);
-          // blobPacket.size += e.data.size;
-          // if(blobPacket.size >= this.blobSize) {
-          //   console.log('uploaded data', blobPacket.blobs, blobPacket.size);
-          //   uploadBlob(blobPacket.blobs.slice())
-          //   blobPacket.blobs = [];
-          //   blobPacket.size = 0;
-          // }
-        }
+          blobPacket.push(e.data);
+        };
 
         recorder.onstop = (e) => {
-          uploadBlob(blobPacket.blobs.slice());
           console.log('onstop event', e);
           this.setState({
             recording: false,
           });
+          uploadBlob(blobPacket);
+          blobPacket = [];
           recorder.stream.getTracks().forEach(track => {track.stop()});
           document.getElementById('theirVideo').src = null;
         }
