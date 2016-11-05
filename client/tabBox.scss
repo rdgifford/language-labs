@@ -29,7 +29,6 @@ $left-min-width: 400px;
       display: flex;
       flex: 0 0 40px;
       align-items: center;
-      font-size: 16px;
       list-style-type: none;
       margin: 0;
       padding: 0;
@@ -40,6 +39,8 @@ $left-min-width: 400px;
         height: 100%;
         
         button {
+          font-size: 18px;
+          font-family: 'quicksand';
           height: 100%;
           background: none;
           border: none;
@@ -47,7 +48,6 @@ $left-min-width: 400px;
           padding: 2px 4px;
           text-decoration: none;
           transition: 0.3s;
-          font-size: 17px;
           color: white;
         }
 
