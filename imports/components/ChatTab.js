@@ -17,7 +17,11 @@ class ChatTab extends React.Component {
       <div id="Chat" className="chatbox-container tabcontent">
         <div className="chatbox-content-container">
           <div className="chatbox-messages">
-            <ChatMessage />
+            <ChatMessage userStatus={'other-user-text'} />
+            <ChatMessage userStatus={'my-text'} />
+            <ChatMessage userStatus={'my-text'} />
+            <ChatMessage userStatus={'other-user-text'} />
+            <ChatMessage userStatus={'my-text'} />
           </div>
           <div className="chatbox-form">
             <form action="" onSubmit={this.submitHandler}>

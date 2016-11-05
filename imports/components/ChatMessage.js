@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ChatMessage = () => (
+const ChatMessage = props => (
   <div className="chatmessage-container">
-    <div className="chatuser"> aaa </div>
-    <div className="chatMessage"></div>
+    <div className="chatuser">aaa: </div>
+    <div className={`chatMessage ${props.userStatus}`}> asda sdasdasd as dasdas dasd asd asdasd asd asd asdas dasd </div>
   </div>
 );
 
