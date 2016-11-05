@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import ChatMessage from './ChatMessage';
-import { Messages } from '../messages';
+import { Messages } from '../api/messages';
 
 class ChatTab extends React.Component {
   constructor(props) {

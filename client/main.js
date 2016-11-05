@@ -6,8 +6,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import '../imports/accountsConfig.js';
 import './styles.scss';
-import { Videos }          from '../imports/collections.js';
-import { Messages }          from '../imports/messages';
+import { Videos }          from '../imports/api/videos';
+import { Messages }          from '../imports/api/messages';
 
 /* ------------------------- PEER.JS INIT ------------------------- */
 const peer = new Peer({

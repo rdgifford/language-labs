@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import keys from '../config/config';
-import { Videos } from '../imports/collections.js';
-import { Messages } from '../imports/messages';
+import { Videos } from '../imports/api/videos';
+import { Messages } from '../imports/api/messages';
 
 const authURL = 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13';
 const translateURL = 'http://api.microsofttranslator.com/V2/Ajax.svc/Translate';
