@@ -20,6 +20,20 @@ $right-min-width: 200px;
   font-weight: bold;
 }
 
+.theprofile {
+  display: flex;
+  flex-direction: row;
+
+  .profileinfo {
+    flex-grow: 1;
+  }
+
+  .profilevideos {
+    align-items: flex-start;
+    flex-grow: 1;
+  }
+}
+
 .profile {
   position: relative;
   flex: 1;

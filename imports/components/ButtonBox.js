@@ -36,7 +36,7 @@ const ButtonBox = ({gotCall, user, incomingCaller, acceptCall, declineCall, curr
           End Chat
         </button>
       }
-      {!currentCall && recording &&
+      {!currentCall && recording && !gotCall &&
         <button onClick={stopRecording}>
           Stop Recording
         </button>

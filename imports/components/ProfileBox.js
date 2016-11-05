@@ -9,7 +9,7 @@ const customStyles = {
   content : {
     top                   : '50%',
     left                  : '50%',
-    right                 : '20%',
+    right                 : '-10%',
     bottom                : 'auto',
     transform             : 'translate(-50%, -50%)',
     background            : '#5fa9d9',
@@ -17,7 +17,16 @@ const customStyles = {
   }
 };
 
-const ProfileBox = ({switchToggle, userListToggle, user, onlineUsers, openModal, modalIsOpen, closeModal, showUser, startChat }) => (
+const showVideo = (videos, user) => {
+	let result = [];
+	let userVideos = videos.findOne({userId: user._id}).videos;
+	for (var key in userVideos) {
+		result.push([key, userVideos[key]]);
+	}
+	return result;
+}
+
+const ProfileBox = ({switchToggle, userListToggle, user, onlineUsers, openModal, modalIsOpen, closeModal, showUser, startChat, videos, playVideo }) => (
 	<div className='profile'>
 	  <div className='userbar'>
 	    <Toggle switch={switchToggle}/>
@@ -34,15 +43,24 @@ const ProfileBox = ({switchToggle, userListToggle, user, onlineUsers, openModal,
 	  >
 	    <h2 className='modalHeader'>{showUser.username}</h2>
 	    <a className='quitProfile' onClick={closeModal}>&#x2715;</a>
-	    <div >
-	      <div><p>Native Language: {showUser.profile.language}</p></div>
-	      <div><p>Want to Learn: {showUser.profile.learning}</p></div>
-	      <div><p>Interests: {showUser.profile.interests}</p></div>
-	      <div><p>Location: {showUser.profile.location}</p></div>
-	      <div className='startCall' onClick={startChat}>
-	        <p>Call {showUser.username}</p>
+	    <div className='theprofile'>
+	    	<div className='profileinfo'>
+		      <div><p>Native Language: {showUser.profile.language}</p></div>
+		      <div><p>Want to Learn: {showUser.profile.learning}</p></div>
+		      <div><p>Interests: {showUser.profile.interests}</p></div>
+		      <div><p>Location: {showUser.profile.location}</p></div>
+		      
 	      </div>
+	     	<div className='profilevideos'>
+	     		<p>Videos: </p>
+	     		{showVideo(videos, showUser).map(tuple => (
+	     			<p onClick={() => playVideo(tuple[1])}>{tuple[0]}</p>
+	     			))}
+	     	</div>
 	    </div>
+	    <div className='startCall' onClick={startChat}>
+        <p>Call {showUser.username}</p>
+      </div>
 	  </Modal>
 	</div>
 )

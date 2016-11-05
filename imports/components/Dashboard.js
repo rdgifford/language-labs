@@ -87,6 +87,7 @@ class Dashboard extends React.Component {
       showUser: props.user,
       troll: troll,
       user,
+      videos: Videos,
     };
     this.blobSize = 1 * 1024 * 1024;
     props.peer.on('call', this.receiveCall.bind(this));
@@ -228,6 +229,12 @@ class Dashboard extends React.Component {
     });
   }
 
+  playVideo(url) {
+    if (this.state.localStream) {return;}
+    this.closeModal();
+    document.getElementById('theirVideo').src = url;
+  }
+
   startRecording(videoTitle) {
     let videoPath = 'profile.videos.' + videoTitle;
     console.log('start recording');
@@ -248,7 +255,6 @@ class Dashboard extends React.Component {
         _stream.getAudioTracks()[0].enabled = false;
 
         if (Videos.findOne({ userId: Meteor.userId() }) === undefined) {
-          console.log('Created Videos property', Videos.findOne({ userId: Meteor.userId() }));
           Videos.insert({ userId: Meteor.userId(), videos: {} });
         }
 
@@ -344,6 +350,8 @@ class Dashboard extends React.Component {
             closeModal={this.closeModal.bind(this)}
             showUser={this.state.showUser}
             startChat={this.startChat.bind(this, this.state.showUser._id, this.props.peer)}
+            videos={this.state.videos}
+            playVideo={this.playVideo.bind(this)}
           />
         </div>
         <div className='bottom'>
