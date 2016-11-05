@@ -249,10 +249,6 @@ class Dashboard extends React.Component {
               console.error('Error uploading', uploader.xhr.response);
             } else {
               console.log('download url', downloadUrl);
-              let video = {}
-              video[videoTitle] = downloadUrl;
-              video.userId = Meteor.userId();
-              Videos.insert(video);
               // Meteor.users.update(
               //   { _id: Meteor.userId() },
               //   { $push: { videoPath: downloadUrl } }
