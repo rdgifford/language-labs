@@ -1,9 +1,9 @@
 import React             from 'react';
 
 const ButtonBox = ({gotCall, user, incomingCaller, acceptCall, declineCall, currentCall, recording, stopRecording, startRecording, endChat}) => (
-  <div className='new-chat'>
+  <div className="new-chat">
     {!gotCall &&
-      <div className='language'>
+      <div className="language">
         {
          `${user.profile.language} / 
           ${user.profile.learning}`
@@ -11,22 +11,22 @@ const ButtonBox = ({gotCall, user, incomingCaller, acceptCall, declineCall, curr
       </div>
     }
     {gotCall &&
-      <div className='language'>
+      <div className="language">
         {incomingCaller.username} calling
       </div>
     }
-    <div className='button-wrapper'>
+    <div className="button-wrapper">
       {gotCall &&
-        <button onClick={acceptCall}>
-          Accept
-        </button>
+        <div className="call-buttons">
+          <button className="button-accept" onClick={acceptCall}>
+            Accept
+          </button>
+          <button className="button-decline" onClick={declineCall}>
+            Decline
+          </button>
+        </div>
       }
-      {gotCall &&
-        <button onClick={declineCall}>
-          Decline
-        </button>
-      }
-      {!currentCall && !recording &&
+      {!currentCall && !recording && !gotCall &&
         <button onClick={startRecording}>
           Record
         </button>
@@ -43,6 +43,6 @@ const ButtonBox = ({gotCall, user, incomingCaller, acceptCall, declineCall, curr
       }
     </div>
   </div>
-)
+);
 
 export default ButtonBox;
